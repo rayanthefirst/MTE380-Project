@@ -20,6 +20,7 @@ class Camera:
         self.red_lower_2 = np.array([160, 100, 100])
         self.red_upper_2 = np.array([180, 255, 255])
 
+        self.isRedLineDetected = False
 
     def start_detection(self, display=False):
         while True:
@@ -35,8 +36,6 @@ class Camera:
             # Detect red line
             redLineFrame = self.detect_red_line(frame)
             # in future we will have to change how we get the value of the redline
-            if redLineFrame:
-                return redLineFrame
 
              # Display the original frame with detected lines
             if display:
@@ -86,38 +85,25 @@ class Camera:
 
         # Draw the detected lines on the original frame
         if lines is not None:
-            return True
-        else:
-            return False
-        # if lines is not None:
-        #     # print("Red line detected")
+            self.isRedLineDetected = True
+            # print("Red line detected")
             
-        #     for line in lines:
-        #         # print("line", line, type(line))
-        #         x1, y1, x2, y2 = line[0]  # Unpack line endpoints
-        #         cv.line(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)  # Draw line in green
+            for line in lines:
+                # print("line", line, type(line))
+                x1, y1, x2, y2 = line[0]  # Unpack line endpoints
+                cv.line(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)  # Draw line in green
 
 
-        #         frame = self.draw_angle(frame, line, middleLine)
-        #         return True
+                frame = self.draw_angle(frame, line, middleLine)
 
 
-        #         # print(ang)
-        #         # time.sleep(2)
+            # Compute angle between detected lines
 
-
-        #     # Compute angle between detected lines
-
-        # else:
-        #     return Fa
+        else:
+            self.isRedLineDetected = False
             # print("No red line detected")
-            ...
 
-
-
-        
-
-        # return frame
+        return frame
     
 
     # def compute_angle(self, line1, line2):
