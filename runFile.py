@@ -2,38 +2,87 @@
 from gpiozero import Motor
 import time
 
-# Set up the motor.
-# GPIO pin 14 is connected to IN1 (forward)
-# GPIO pin 15 is connected to IN2 (backward)
+# Set up the motors.
+# GPIO pin 14 is connected to IN1 (forward) for motor (left side)
+# GPIO pin 15 is connected to IN2 (backward) for motor (left side)
+# GPIO pin 12 is connected to IN1 (forward) for motor2 (right side)
+# GPIO pin 13 is connected to IN2 (backward) for motor2 (right side)
 # The enable pin (ENA) is hard-wired to 5V for full speed.
 motor = Motor(forward=14, backward=15)
 motor2 = Motor(forward=12, backward=13)
 
-SPEED=0.5
+SPEED = 0.5
+TURN_TIME = 1  # seconds; adjust this value so that the pivot rotates 90°
 
 def main():
-    print("Motor Control Script")
-    print("Commands:")
-    print("  1: Run motor forward at ~1000 RPM")
-    print("  2: Run motor backward at ~1000 RPM")
-    print("  0: Stop motor")
+    print("Motor Control Script: Running timed sequence")
     
-    while True:
-        cmd = input("Enter command (0, 1, 2): ").strip()
-        if cmd == "1":
-            print("Running motor forward...")
-            motor.forward(speed=SPEED)  # Runs at full speed
-            motor2.backward(speed=SPEED)
-        elif cmd == "2":
-            print("Running motor backward...")
-            motor.backward(speed=SPEED)  # Runs at full speed in reverse
-            motor2.forward(speed=SPEED)
-        elif cmd == "0":
-            print("Stopping motor...")
-            motor.stop()
-            motor2.stop()
-        else:
-            print("Invalid command. Please enter 0, 1, or 2.")
+    # Run forward for 5 seconds.
+    # (Forward: left wheel physical forward via motor.forward(),
+    #  right wheel physical forward via motor2.backward())
+    print("Running forward for 5 seconds...")
+    motor.forward(speed=SPEED)
+    motor2.backward(speed=SPEED)
+    time.sleep(5)
+    motor.stop()
+    motor2.stop()
+    time.sleep(1)
+    
+    # Run backward for 5 seconds.
+    # (Backward: left wheel physical backward via motor.backward(),
+    #  right wheel physical backward via motor2.forward())
+    print("Running backward for 5 seconds...")
+    motor.backward(speed=SPEED)
+    motor2.forward(speed=SPEED)
+    time.sleep(5)
+    motor.stop()
+    motor2.stop()
+    time.sleep(1)
+    
+    # --- First pivot: Turn right 90° and return ---
+    # To pivot right (clockwise), we want:
+    #   left wheel: physical forward  (motor.forward())
+    #   right wheel: physical backward (motor2.forward())
+    print("Turning right 90°...")
+    motor.forward(speed=SPEED)
+    motor2.forward(speed=SPEED)
+    time.sleep(TURN_TIME)
+    motor.stop()
+    motor2.stop()
+    time.sleep(1)
+    
+    # Now, return to the original orientation by pivoting left 90°.
+    # To pivot left (counterclockwise), we want:
+    #   left wheel: physical backward (motor.backward())
+    #   right wheel: physical forward  (motor2.backward())
+    print("Returning to original orientation from right turn...")
+    motor.backward(speed=SPEED)
+    motor2.backward(speed=SPEED)
+    time.sleep(TURN_TIME)
+    motor.stop()
+    motor2.stop()
+    time.sleep(1)
+    
+    # --- Second pivot: Turn left 90° and return ---
+    # To pivot left (counterclockwise), we use the same command as above:
+    print("Turning left 90°...")
+    motor.backward(speed=SPEED)
+    motor2.backward(speed=SPEED)
+    time.sleep(TURN_TIME)
+    motor.stop()
+    motor2.stop()
+    time.sleep(1)
+    
+    # Return to original orientation by pivoting right 90°.
+    print("Returning to original orientation from left turn...")
+    motor.forward(speed=SPEED)
+    motor2.forward(speed=SPEED)
+    time.sleep(TURN_TIME)
+    motor.stop()
+    motor2.stop()
+    time.sleep(1)
+    
+    print("Sequence complete.")
 
 if __name__ == '__main__':
     try:
@@ -41,3 +90,4 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print("\nExiting program.")
         motor.stop()
+        motor2.stop()
