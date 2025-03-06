@@ -7,6 +7,9 @@ import time
 # GPIO pin 15 is connected to IN2 (backward)
 # The enable pin (ENA) is hard-wired to 5V for full speed.
 motor = Motor(forward=14, backward=15)
+motor2 = Motor(forward=12, backward=13)
+
+SPEED=0.5
 
 def main():
     print("Motor Control Script")
@@ -19,13 +22,16 @@ def main():
         cmd = input("Enter command (0, 1, 2): ").strip()
         if cmd == "1":
             print("Running motor forward...")
-            motor.forward()  # Runs at full speed
+            motor.forward(speed=SPEED)  # Runs at full speed
+            motor2.backward(speed=SPEED)
         elif cmd == "2":
             print("Running motor backward...")
-            motor.backward()  # Runs at full speed in reverse
+            motor.backward(speed=SPEED)  # Runs at full speed in reverse
+            motor2.forward(speed=SPEED)
         elif cmd == "0":
             print("Stopping motor...")
             motor.stop()
+            motor2.stop()
         else:
             print("Invalid command. Please enter 0, 1, or 2.")
 
