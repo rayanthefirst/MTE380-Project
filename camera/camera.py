@@ -35,7 +35,8 @@ class Camera:
             # Detect red line
             redLineFrame = self.detect_red_line(frame)
             # in future we will have to change how we get the value of the redline
-            return redLineFrame
+            if redLineFrame:
+                return redLineFrame
 
              # Display the original frame with detected lines
             if display:
@@ -84,7 +85,7 @@ class Camera:
         lines = cv.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=50, maxLineGap=10)
 
         # Draw the detected lines on the original frame
-        if len(lines) > 0:
+        if lines is not None:
             return True
         else:
             return False
