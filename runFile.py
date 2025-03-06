@@ -23,11 +23,14 @@ thread = Thread(target=camera.start_detection, args=(True,))
 def main():
     # Start the camera thread.
     thread.start()
-    while camera.isRedLineDetected == False:
-        time.sleep(1)
+    while True:
+        while camera.isRedLineDetected == False:
+            time.sleep(1)
 
 
-    demo()
+        demo()
+        camera.isRedLineDetected = False
+
 
 
 
