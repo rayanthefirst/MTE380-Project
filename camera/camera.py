@@ -21,7 +21,7 @@ class Camera:
         self.red_upper_2 = np.array([180, 255, 255])
 
 
-    def start_detection(self):
+    def start_detection(self, display=False):
         while True:
             # Capture Frame
             ret, frame = self.cap.read()
@@ -34,9 +34,12 @@ class Camera:
 
             # Detect red line
             redLineFrame = self.detect_red_line(frame)
+            # in future we will have to change how we get the value of the redline
+            return redLineFrame
 
              # Display the original frame with detected lines
-            cv.imshow('Red Line Detection', redLineFrame)
+            if display:
+                cv.imshow('Red Line Detection', redLineFrame)
 
             # Break loop on user interrupt (e.g., 'q' key press)
             if cv.waitKey(1) & 0xFF == ord('q'):
@@ -81,26 +84,31 @@ class Camera:
         lines = cv.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=50, maxLineGap=10)
 
         # Draw the detected lines on the original frame
-        if lines is not None:
-            # print("Red line detected")
-            
-            for line in lines:
-                # print("line", line, type(line))
-                x1, y1, x2, y2 = line[0]  # Unpack line endpoints
-                cv.line(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)  # Draw line in green
-
-
-                frame = self.draw_angle(frame, line, middleLine)
-                return True
-
-
-                # print(ang)
-                # time.sleep(2)
-
-
-            # Compute angle between detected lines
-
+        if len(lines) > 0:
+            return True
         else:
+            return False
+        # if lines is not None:
+        #     # print("Red line detected")
+            
+        #     for line in lines:
+        #         # print("line", line, type(line))
+        #         x1, y1, x2, y2 = line[0]  # Unpack line endpoints
+        #         cv.line(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)  # Draw line in green
+
+
+        #         frame = self.draw_angle(frame, line, middleLine)
+        #         return True
+
+
+        #         # print(ang)
+        #         # time.sleep(2)
+
+
+        #     # Compute angle between detected lines
+
+        # else:
+        #     return Fa
             # print("No red line detected")
             ...
 
@@ -108,7 +116,7 @@ class Camera:
 
         
 
-        return frame
+        # return frame
     
 
     # def compute_angle(self, line1, line2):

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from gpiozero import Motor
 import time
+from camera.camera import Camera
 
 # Set up the motors.
 # GPIO pin 14 is connected to IN1 (forward) for motor (left side)
@@ -15,6 +16,26 @@ SPEED = 0.5
 TURN_TIME = 1  # seconds; adjust this value so that the pivot rotates 90°
 
 def main():
+    camera = Camera()
+    camera.initCamera()
+    camera.start_detection(display=True)
+    isRedLine = False
+
+
+    while True:
+
+        isRedLine = camera.detect_red_line()
+
+        if isRedLine:
+            demo()
+            break
+
+
+
+
+
+def demo():
+
     print("Motor Control Script: Running timed sequence")
     
     # Run forward for 5 seconds.
