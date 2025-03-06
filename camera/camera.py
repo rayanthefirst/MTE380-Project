@@ -64,6 +64,7 @@ class Camera:
         higher_y = height
 
 
+
         middleLine = np.array([[middle_x, lower_y, middle_x, higher_y]])
         cv.line(frame, (middleLine[0][0], middleLine[0][1]), (middleLine[0][2], middleLine[0][3]), (0, 255, 255), 2)
 
@@ -89,8 +90,8 @@ class Camera:
                 cv.line(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)  # Draw line in green
 
 
-                # ang, v1, v2 = self.compute_angle(line, middleLine)
                 frame = self.draw_angle(frame, line, middleLine)
+                return True
 
 
                 # print(ang)
@@ -110,24 +111,24 @@ class Camera:
         return frame
     
 
-    def compute_angle(self, line1, line2):
-        # Compute the angle of the detected line
+    # def compute_angle(self, line1, line2):
+    #     # Compute the angle of the detected line
         
-        x1, y1, x2, y2 = line1[0]
-        x3, y3, x4, y4 = line2[0]
-        # Compute direction vectors for each line
-        v1 = (x2 - x1, y2 - y1)
-        v2 = (x4 - x3, y4 - y3)
+    #     x1, y1, x2, y2 = line1[0]
+    #     x3, y3, x4, y4 = line2[0]
+    #     # Compute direction vectors for each line
+    #     v1 = (x2 - x1, y2 - y1)
+    #     v2 = (x4 - x3, y4 - y3)
         
-        # Compute dot product and magnitudes
-        dot = v1[0]*v2[0] + v1[1]*v2[1]
-        mag1 = math.sqrt(v1[0]**2 + v1[1]**2)
-        mag2 = math.sqrt(v2[0]**2 + v2[1]**2)
+    #     # Compute dot product and magnitudes
+    #     dot = v1[0]*v2[0] + v1[1]*v2[1]
+    #     mag1 = math.sqrt(v1[0]**2 + v1[1]**2)
+    #     mag2 = math.sqrt(v2[0]**2 + v2[1]**2)
         
-        # Calculate angle in radians then convert to degrees
-        angle_rad = math.acos(dot / (mag1 * mag2))
-        angle_deg = math.degrees(angle_rad)
-        return angle_deg, v1, v2
+    #     # Calculate angle in radians then convert to degrees
+    #     angle_rad = math.acos(dot / (mag1 * mag2))
+    #     angle_deg = math.degrees(angle_rad)
+    #     return angle_deg, v1, v2
     
 
     def draw_angle(self, frame, red_line, middle_line):
