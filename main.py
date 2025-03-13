@@ -1,16 +1,13 @@
-from gpiozero import DigitalOutputDevice
+from gpiozero import AngularServo
 from time import sleep
 
-# Define the GPIO pin (GPIO 3 corresponds to physical pin 5 on the Raspberry Pi)
-servo_pin = DigitalOutputDevice(3)
+# Define the servo on GPIO 3 (which corresponds to physical pin 5 on the Raspberry Pi)
+servo = AngularServo(3, min_angle=0, max_angle=180)
 
 def move_servo_90():
     print("Moving servo to 90 degrees")
-    # Approximate a 90-degree pulse (1.5ms high signal)
-    servo_pin.on()
-    sleep(0.0015)  # 1.5ms pulse
-    servo_pin.off()
-    sleep(0.02)    # 20ms delay (standard servo refresh rate)
+    servo.angle = 90
+    sleep(0.5)  # Allow time for the servo to reach the target position
 
 # Move the servo
 move_servo_90()
