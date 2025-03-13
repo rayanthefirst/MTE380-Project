@@ -2,7 +2,7 @@ from gpiozero import AngularServo
 from time import sleep
 
 # Define the servo on GPIO 3 (which corresponds to physical pin 5 on the Raspberry Pi)
-servo = AngularServo(3, min_angle=0, max_angle=180)
+servo = AngularServo(3, min_angle=0, max_angle=180, min_pulse_width=0.0006, max_pulse_width=0.0024)
 
 def move_servo_90():
     print("Moving servo to 90 degrees")
