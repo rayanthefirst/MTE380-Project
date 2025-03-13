@@ -3,6 +3,8 @@ import numpy as np
 import math
 import time
 
+#GPIO 3 servo
+
 class Camera:
     def initCamera(self):
         print("Camera initialized")
