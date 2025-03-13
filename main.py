@@ -8,6 +8,7 @@ def move_servo_90():
     print("Moving servo to 90 degrees")
     servo.angle = 90
     sleep(0.5)  # Allow time for the servo to reach the target position
+    servo.angle = 0  # Reset the servo to 0 degrees
 
 # Move the servo
 while True:
