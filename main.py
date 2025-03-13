@@ -10,4 +10,5 @@ def move_servo_90():
     sleep(0.5)  # Allow time for the servo to reach the target position
 
 # Move the servo
-move_servo_90()
+while True:
+    move_servo_90()
