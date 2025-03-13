@@ -1,24 +1,15 @@
-from gpiozero import Servo
+from gpiozero import DigitalOutputDevice
 from time import sleep
 
-# Initialize servo on GPIO3 with pulse width calibration
-servo = Servo(3, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
+# Define the GPIO pin
+servo_pin = DigitalOutputDevice(3)
 
-# Move servo to 0° (minimum)
-print("Moving servo to minimum (0 degrees)")
-servo.min()
-sleep(2)
+def move_servo_90():
+    # Approximate a 90-degree pulse (1.5ms high signal)
+    servo_pin.on()
+    sleep(0.0015)  # 1.5ms pulse
+    servo_pin.off()
+    sleep(0.02)    # 20ms delay (standard servo refresh rate)
 
-# Move servo to 90° (middle)
-print("Moving servo to middle (90 degrees)")
-servo.mid()
-sleep(2)
-
-# Move servo to 180° (maximum)
-print("Moving servo to maximum (180 degrees)")
-servo.max()
-sleep(2)
-
-# Cleanup: Release the servo control
-servo.value = None  
-print("Servo released")
+# Move the servo
+move_servo_90()
