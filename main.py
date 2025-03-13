@@ -1,15 +1,34 @@
-from gpiozero import AngularServo
-from time import sleep
+import RPi.GPIO as GPIO
+import time
 
-# Define the servo on GPIO 3 (which corresponds to physical pin 5 on the Raspberry Pi)
-servo = AngularServo(2, min_angle=0, max_angle=180, min_pulse_width=0.0006, max_pulse_width=0.0024)
+# Configuration
+servo_pin = 18         # GPIO pin number (using BCM numbering)
+frequency = 50         # Servo PWM frequency in Hz
 
-def move_servo_90():
-    print("Moving servo to 90 degrees")
-    servo.angle = 90
-    sleep(0.5)  # Allow time for the servo to reach the target position
-    servo.angle = 0  # Reset the servo to 0 degrees
+# Setup
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(servo_pin, GPIO.OUT)
 
-# Move the servo
-while True:
-    move_servo_90()
+# Create PWM instance with the desired frequency
+pwm = GPIO.PWM(servo_pin, frequency)
+pwm.start(2.5)  # Starting duty cycle (2.5% for 0 degrees on many servos)
+
+def set_angle(angle):
+    # Convert the angle to duty cycle:
+    # duty_cycle = (angle / 18) + 2.5 is a common conversion formula
+    duty_cycle = (angle / 18.0) + 2.5
+    pwm.ChangeDutyCycle(duty_cycle)
+
+try:
+    while True:
+        print("Moving servo to 90 degrees")
+        set_angle(90)
+        time.sleep(0.5)
+        print("Moving servo back to 0 degrees")
+        set_angle(0)
+        time.sleep(0.5)
+except KeyboardInterrupt:
+    pass
+finally:
+    pwm.stop()
+    GPIO.cleanup()
