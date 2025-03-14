@@ -11,7 +11,7 @@ encoder1 = RotaryEncoder(a=9, b=10, max_steps=100)
 motor2 = Motor(forward=14, backward=15)
 encoder2 = RotaryEncoder(a=17, b=18, max_steps=100)
 
-SPEED = 0.5
+SPEED = 0.25
 
 def main():
     try:
