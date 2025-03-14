@@ -63,27 +63,3 @@ def turn_left(degree):
     time.sleep(duration)
     stop()
     print("Turned left {}°.".format(degree))
-
-def pid_control():
-    """
-    Implement PID control for the robot.
-    This function will be called repeatedly in a loop.
-    """
-    # Implement PID control here.
-    
-# Example usage:
-if __name__ == '__main__':
-    try:
-        init()
-        forward()
-        time.sleep(2)
-        stop()
-        turn_right(90)
-        time.sleep(1)
-        backward()
-        time.sleep(2)
-        stop()
-        turn_left(90)
-    except KeyboardInterrupt:
-        stop()
-        print("Exiting program.")

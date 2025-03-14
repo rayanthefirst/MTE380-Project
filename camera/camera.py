@@ -3,177 +3,131 @@ import numpy as np
 import math
 import time
 
-#GPIO 3 servo
-
 class Camera:
-    def initCamera(self):
+    def __init__(self):
+        # You can keep initCamera() if you prefer to call that separately
+        # but I'll just do the capture initialization here for clarity.
         print("Camera initialized")
         self.cap = cv.VideoCapture(0)
         
-        # [*1] Set resolution
-        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)  # Set width to 640 pixels
-        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)  # Set height to 480 pixels
-        self.cap.set(cv.CAP_PROP_FPS, 30)  # Set to 30 frames per second
+        # Set resolution
+        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
+        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+        self.cap.set(cv.CAP_PROP_FPS, 30)
 
-
-        # Define HSV range for red color
+        # Define HSV range for red color – same as your original code
         self.red_lower = np.array([0, 100, 100])
         self.red_upper = np.array([10, 255, 255])
         self.red_lower_2 = np.array([160, 100, 100])
         self.red_upper_2 = np.array([180, 255, 255])
-
+        
         self.isRedLineDetected = False
+        self.x_last = 0
+        self.y_last = 0
 
     def start_detection(self, display=False):
+        """
+        Continuously capture frames and detect + track the red line contours.
+        """
         while True:
-            # Capture Frame
             ret, frame = self.cap.read()
             if not ret:
                 print("Failed to capture frame")
                 break
 
-            # Resize frame for consistency
+            # Optionally resize to a square if you want consistency
             frame = cv.resize(frame, (480, 480))
 
-            # Detect red line
-            redLineFrame = self.detect_red_line(frame)
-            # in future we will have to change how we get the value of the redline
+            # Convert BGR -> HSV
+            hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
-             # Display the original frame with detected lines
+            # Step 1: Create a mask for red pixels
+            mask1 = cv.inRange(hsv, self.red_lower, self.red_upper)
+            mask2 = cv.inRange(hsv, self.red_lower_2, self.red_upper_2)
+            mask = cv.bitwise_or(mask1, mask2)
+
+            # Step 2: Morphological ops to clean up the mask
+            # (Adjust iterations, kernel size if needed)
+            kernel = np.ones((3,3), np.uint8)
+            mask = cv.erode(mask, kernel, iterations=5)
+            mask = cv.dilate(mask, kernel, iterations=9)
+
+            # Step 3: Find contours in the cleaned-up mask
+            contours, hierarchy = cv.findContours(
+                mask.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE
+            )
+
+            # Step 4: If we found any contours, pick one and analyze it
+            if contours:
+                self.isRedLineDetected = True
+
+                # If there's just one contour, use it
+                if len(contours) == 1:
+                    blackbox = cv.minAreaRect(contours[0])
+                else:
+                    # Otherwise, we pick the bottom-most or largest
+                    # (the tutorial does a 'bottom-most' approach)
+                    candidates = []
+                    off_bottom = 0
+                    for idx, cnt in enumerate(contours):
+                        box = cv.minAreaRect(cnt)
+                        (x_min, y_min), (w_min, h_min), angle = box
+                        # We’ll look at the top-left corner of the box
+                        # or just use the center’s y_min
+                        # to figure out if it’s near the bottom
+                        candidates.append((y_min, idx, x_min, y_min))
+
+                    # Sort by y_min (vertical position) ascending
+                    candidates = sorted(candidates, key=lambda x: x[0])
+                    # We'll take the bottom-most by picking the highest y_min
+                    # which is the last in the sorted list
+                    _, chosen_idx, x_min, y_min = candidates[-1]
+                    blackbox = cv.minAreaRect(contours[chosen_idx])
+
+                # Extract bounding box info
+                (x_min, y_min), (w_min, h_min), ang = blackbox
+
+                # For a "straight" rectangle, minAreaRect can have negative angles, etc.
+                # The tutorial code tries to fix the angle for different shapes:
+                if ang < -45:
+                    ang = 90 + ang
+                if w_min < h_min and ang > 0:
+                    ang = (90 - ang) * -1
+                if w_min > h_min and ang < 0:
+                    ang = 90 + ang
+
+                # Step 5: Compute an "error" from frame center for line-following
+                frame_center_x = frame.shape[1] // 2  # half the width
+                error = int(x_min - frame_center_x)
+
+                # Convert angle to an integer for display
+                ang = int(ang)
+
+                # Draw the bounding box
+                box_pts = cv.boxPoints(blackbox)
+                box_pts = np.int8(box_pts)
+                cv.drawContours(frame, [box_pts], 0, (0, 0, 255), 2)
+
+                # Put debug info on the frame
+                cv.putText(frame, f"Angle: {ang}", (10, 40),
+                           cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                cv.putText(frame, f"Error: {error}", (10, 80),
+                           cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+
+                # Optionally draw a line from the top to the bottom
+                cv.line(frame, (int(x_min), 0), (int(x_min), frame.shape[0]),
+                        (255, 0, 0), 2)
+
+            else:
+                self.isRedLineDetected = False
+
             if display:
-                cv.imshow('Red Line Detection', redLineFrame)
+                cv.imshow("Red Line Contour Tracking", frame)
 
-            # Break loop on user interrupt (e.g., 'q' key press)
+            # Break loop on 'q'
             if cv.waitKey(1) & 0xFF == ord('q'):
-                self.cap.release()
-                cv.destroyAllWindows()
-                return
+                break
 
-
-
-            
-
-
-    def detect_red_line(self, frame):
-        # Convert to HSV color space
-        hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-
-        # Create masks for red color
-        mask1 = cv.inRange(hsv, self.red_lower, self.red_upper)
-        mask2 = cv.inRange(hsv, self.red_lower_2, self.red_upper_2)
-        mask = cv.bitwise_or(mask1, mask2)
-
-        height, width, _ = frame.shape
-        middle_x = width // 2
-        lower_y = 0
-        higher_y = height
-
-
-
-        middleLine = np.array([[middle_x, lower_y, middle_x, higher_y]])
-        cv.line(frame, (middleLine[0][0], middleLine[0][1]), (middleLine[0][2], middleLine[0][3]), (0, 255, 255), 2)
-
-        # Apply mask to isolate red regions
-        red_regions = cv.bitwise_and(frame, frame, mask=mask)
-
-        # Convert the mask to grayscale for edge detection
-        gray = cv.cvtColor(red_regions, cv.COLOR_BGR2GRAY)
-
-        # Apply Canny edge detection
-        edges = cv.Canny(gray, 50, 150)
-
-        # Use HoughLinesP to detect line segments
-        lines = cv.HoughLinesP(edges, 1, np.pi / 180, threshold=50, minLineLength=50, maxLineGap=10)
-
-        # Draw the detected lines on the original frame
-        if lines is not None:
-            self.isRedLineDetected = True
-            # print("Red line detected")
-            
-            for line in lines:
-                # print("line", line, type(line))
-                x1, y1, x2, y2 = line[0]  # Unpack line endpoints
-                cv.line(frame, (x1, y1), (x2, y2), (255, 255, 0), 2)  # Draw line in green
-
-
-                frame = self.draw_angle(frame, line, middleLine)
-
-
-            # Compute angle between detected lines
-
-        else:
-            self.isRedLineDetected = False
-            # print("No red line detected")
-
-        return frame
-    
-
-    # def compute_angle(self, line1, line2):
-    #     # Compute the angle of the detected line
-        
-    #     x1, y1, x2, y2 = line1[0]
-    #     x3, y3, x4, y4 = line2[0]
-    #     # Compute direction vectors for each line
-    #     v1 = (x2 - x1, y2 - y1)
-    #     v2 = (x4 - x3, y4 - y3)
-        
-    #     # Compute dot product and magnitudes
-    #     dot = v1[0]*v2[0] + v1[1]*v2[1]
-    #     mag1 = math.sqrt(v1[0]**2 + v1[1]**2)
-    #     mag2 = math.sqrt(v2[0]**2 + v2[1]**2)
-        
-    #     # Calculate angle in radians then convert to degrees
-    #     angle_rad = math.acos(dot / (mag1 * mag2))
-    #     angle_deg = math.degrees(angle_rad)
-    #     return angle_deg, v1, v2
-    
-
-    def draw_angle(self, frame, red_line, middle_line):
-        # Unpack red line endpoints
-        x1, y1, x2, y2 = red_line[0]
-        # Get the x-coordinate of the vertical (middle) line
-        middle_x = middle_line[0][0]
-        
-        # Compute the intersection point between the red line and the vertical line at x = middle_x
-        if x2 != x1:
-            slope = (y2 - y1) / (x2 - x1)
-            inter_y = int(y1 + slope * (middle_x - x1))
-        else:
-            # If the red line is vertical, choose the midpoint of its y-values
-            inter_y = (y1 + y2) // 2
-        intersection = (middle_x, inter_y)
-        
-        # Compute the angle of the red line relative to the horizontal axis
-        angle_red = math.degrees(math.atan2(y2 - y1, x2 - x1))
-        # The vertical line is 90 degrees relative to the horizontal
-        angle_vert = 90.0
-        # Compute the absolute difference between the red line and vertical
-        angle_diff = abs(angle_red - angle_vert)
-        
-        # For drawing the arc, define the arc to span from the smaller to larger angle value.
-        start_angle = min(angle_red, angle_vert)
-        end_angle = max(angle_red, angle_vert)
-        
-        # Draw an arc centered at the intersection point.
-        # (30,30) is the radius for the arc – adjust as needed.
-        cv.ellipse(frame, intersection, (30, 30), 0, start_angle, end_angle, (0, 0, 255), 2)
-        
-        # Draw a small circle at the intersection point for clarity.
-        cv.circle(frame, intersection, 5, (0, 0, 255), -1)
-        
-        # Display the computed angle difference near the intersection point.
-        cv.putText(frame, f"{angle_diff:.1f} deg", (intersection[0] + 10, intersection[1] - 10),
-                cv.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
-        
-        return frame
-
-        
-
-
-
-
-
-
-
-
+        self.cap.release()
+        cv.destroyAllWindows()
 
