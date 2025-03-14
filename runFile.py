@@ -3,30 +3,41 @@ from time import sleep
 
 #!/usr/bin/env python3
 
-# Set up the motor (adjust the GPIO pins as needed for your hardware)
-motor = Motor(forward=13, backward=12)
+# Set up the first motor and encoder
+motor1 = Motor(forward=13, backward=12)
+encoder1 = RotaryEncoder(a=10, b=9)
 
-# Set up the rotary encoder (adjust the GPIO pins and max_steps as needed)
-encoder = RotaryEncoder(a=10, b=9, max_steps=100)
+# Set up the second motor and encoder
+motor2 = Motor(forward=14, backward=15)
+encoder2 = RotaryEncoder(a=17, b=18)
+
 SPEED = 0.5
 
 def main():
     try:
         while True:
-            # Read the encoder position (number of steps)
-            print("Encoder steps:", encoder.steps)
+            # Read the encoder positions
+            print("Encoder 1 steps:", encoder1.steps)
+            print("Encoder 2 steps:", encoder2.steps)
             
-            # Example control: run the motor forward until 50 steps, then reverse
-            if encoder.steps < 50:
-                motor.forward(speed=SPEED)
+            # Control the first motor
+            if encoder1.steps < 50:
+                motor1.forward(speed=SPEED)
             else:
-                motor.backward(speed=SPEED)
+                motor1.backward(speed=SPEED)
+            
+            # Control the second motor
+            if encoder2.steps < 50:
+                motor2.forward(speed=SPEED)
+            else:
+                motor2.backward(speed=SPEED)
                 
             sleep(0.1)
     except KeyboardInterrupt:
-        print("Stopping the motor...")
+        print("Stopping the motors...")
     finally:
-        motor.stop()
+        motor1.stop()
+        motor2.stop()
 
 if __name__ == '__main__':
     main()
