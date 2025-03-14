@@ -5,11 +5,11 @@ from time import sleep
 
 # Set up the first motor and encoder
 motor1 = Motor(forward=13, backward=12)
-encoder1 = RotaryEncoder(a=9, b=10)
+encoder1 = RotaryEncoder(a=9, b=10, max_steps=100)
 
 # Set up the second motor and encoder
 motor2 = Motor(forward=14, backward=15)
-encoder2 = RotaryEncoder(a=17, b=18)
+encoder2 = RotaryEncoder(a=17, b=18, max_steps=100)
 
 SPEED = 0.5
 
