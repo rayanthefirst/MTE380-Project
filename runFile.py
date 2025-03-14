@@ -4,10 +4,10 @@ from time import sleep
 #!/usr/bin/env python3
 
 # Set up the motor (adjust the GPIO pins as needed for your hardware)
-motor = Motor(forward=17, backward=18)
+motor = Motor(forward=13, backward=12)
 
 # Set up the rotary encoder (adjust the GPIO pins and max_steps as needed)
-encoder = RotaryEncoder(a=22, b=23, max_steps=100)
+encoder = RotaryEncoder(a=10, b=9, max_steps=100)
 SPEED = 0.5
 
 def main():
