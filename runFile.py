@@ -8,6 +8,7 @@ motor = Motor(forward=17, backward=18)
 
 # Set up the rotary encoder (adjust the GPIO pins and max_steps as needed)
 encoder = RotaryEncoder(a=22, b=23, max_steps=100)
+SPEED = 0.5
 
 def main():
     try:
@@ -17,9 +18,9 @@ def main():
             
             # Example control: run the motor forward until 50 steps, then reverse
             if encoder.steps < 50:
-                motor.forward()
+                motor.forward(speed=SPEED)
             else:
-                motor.backward()
+                motor.backward(speed=SPEED)
                 
             sleep(0.1)
     except KeyboardInterrupt:
