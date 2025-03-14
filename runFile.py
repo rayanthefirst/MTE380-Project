@@ -32,7 +32,7 @@ def main():
             else:
                 motor2.backward(speed=SPEED)
                 
-            sleep(0.1)
+            sleep(3)
     except KeyboardInterrupt:
         print("Stopping the motors...")
     finally:
