@@ -5,7 +5,7 @@ from time import sleep
 
 # Set up the first motor and encoder
 motor1 = Motor(forward=13, backward=12)
-encoder1 = RotaryEncoder(a=10, b=9)
+encoder1 = RotaryEncoder(a=9, b=10)
 
 # Set up the second motor and encoder
 motor2 = Motor(forward=14, backward=15)
