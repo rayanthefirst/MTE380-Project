@@ -40,7 +40,7 @@ from driver.drive import *
 
 
 
-drive(forward=True)
+drive(forward=False)
 sleep(2)
 
 
