@@ -31,9 +31,9 @@ while True:
                 # Turn left to adjust.
                 pivot_turn(turn_right=False, degree=turn_angle)
             print("HELLLOOOOO")
-    # else:
-    #     # No red detected; stop the motors.
-    #     stop()
+    else:
+        # No red detected; stop the motors.
+        stop()
     sleep(0.5)
 
 
