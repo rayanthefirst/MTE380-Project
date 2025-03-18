@@ -5,7 +5,7 @@ import time
 from driver.drive import *
 cam = Camera(camera_id=1)
 # cam.start_detection(display=True)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
 Kp = 0.1
 Ka = 0.1
