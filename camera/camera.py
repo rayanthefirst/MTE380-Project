@@ -104,6 +104,9 @@ class Camera:
                 box_pts = cv.boxPoints(blackbox)
                 box_pts = np.int32(box_pts)
 
+                print(self.angle)
+                print(self.curr_error)
+
                 if box_pts.size > 0:
                     cv.drawContours(frame, [box_pts], 0, (0, 0, 255), 2)
 
