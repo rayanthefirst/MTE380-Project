@@ -6,8 +6,8 @@ from driver.drive import *
 cam = Camera(camera_id=0)
 cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
-Kp = 0.1
-Ka = 0.1
+Kp = 1
+Ka = 1
 error_threshold = 10
 
 while True:
