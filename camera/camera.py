@@ -61,7 +61,8 @@ class Camera:
             kernel = np.ones((3,3), np.uint8)
             mask = cv.erode(mask, kernel, iterations=5)
             mask = cv.dilate(mask, kernel, iterations=9)
-            cv.imshow("mask2", mask)
+            if display:
+                cv.imshow("mask2", mask)
 
 
             # Step 3: Find contours in the cleaned-up mask
