@@ -8,7 +8,7 @@ cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
 Kp = 1
 Ka = 1
-error_threshold = 10
+error_threshold = 50
 
 while True:
     if cam.isRedLineDetected:
@@ -30,7 +30,6 @@ while True:
                 # If error is negative, the red line is to the left.
                 # Turn left to adjust.
                 pivot_turn(turn_right=False, degree=turn_angle)
-            print("HELLLOOOOO")
     else:
         # No red detected; stop the motors.
         stop()
