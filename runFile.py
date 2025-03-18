@@ -4,7 +4,7 @@ from threading import Thread
 import time
 cam = Camera(camera_id=0)
 # cam.start_detection(display=True)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
+cameraProcess = Thread(target=cam.start_detection, args={"display": False})
 
 
 while True:
