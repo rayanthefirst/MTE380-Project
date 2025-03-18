@@ -3,7 +3,6 @@ import numpy as np
 import math
 import time
 import os
-import keyboard
 
 class Camera:
     def __init__(self, camera_id=0):
@@ -152,29 +151,28 @@ class Camera:
         start_time = time.time()
         print(f"Recording started. Saving to {filename}")
 
-        while True:
-            ret, frame = self.cap.read()
-            if not ret:
-                print("Failed to capture frame")
-                break
 
-            writer.write(frame)
-            if display:
-                cv.imshow("Recording", frame)
-                if cv.waitKey(1) & 0xFF == ord('q'):
-                        print("Recording stopped by user.")
-                        break
-                
-            else:
-                if keyboard.is_pressed('q'):
-                    print("Recording stopped by user.")
+        try:
+            while True:
+                ret, frame = self.cap.read()
+                if not ret:
+                    print("Failed to capture frame")
                     break
 
-               
+                writer.write(frame)
+                if display:
+                    cv.imshow("Recording", frame)
+                    if cv.waitKey(1) & 0xFF == ord('q'):
+                            print("Recording stopped by user.")
+                            break
+                                    
+                if time.time() - start_time > duration:
+                    print("Recording completed by duration.")
+                    break
 
-            if time.time() - start_time > duration:
-                print("Recording completed by duration.")
-                break
 
-        writer.release()
-        cv.destroyWindow("Recording")
+        except KeyboardInterrupt:
+            print("Recording stopped by user.")
+        finally:
+            writer.release()
+            cv.destroyWindow("Recording")
