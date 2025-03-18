@@ -71,11 +71,13 @@ def determine_constants():
     This function is used to experimentally determine the encoder counts per degree of turn.
     """
     try:
+        drive(forward=True) 
         while True:
             print("Left encoder steps:", left_encoder.steps)
             print("Right encoder steps:", right_encoder.steps)
             sleep(1)
     except KeyboardInterrupt:
+        stop()
         print("Stopping the motors...")
     finally:
         stop()

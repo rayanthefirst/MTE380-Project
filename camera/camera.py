@@ -19,10 +19,10 @@ class Camera:
         # self.red_upper = np.array([10, 255, 255])
         # self.red_lower_2 = np.array([160, 100, 100])
         # self.red_upper_2 = np.array([180, 255, 255])
-        self.red_lower = np.array([0, 0, 200])
-        self.red_upper = np.array([180, 30, 255])
-        self.red_lower_2 = np.array([0, 0, 200])
-        self.red_upper_2 = np.array([180, 30, 255])
+        self.red_lower = np.array([0, 0, 0])
+        self.red_upper = np.array([180, 255, 30])
+        self.red_lower_2 = np.array([0, 0, 0])
+        self.red_upper_2 = np.array([180, 255, 30])
         
         self.isRedLineDetected = False
         self.angle= 0
