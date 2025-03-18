@@ -122,6 +122,6 @@ def test_encoder_const():
         stop()
         print("Stopping the motors.")
     finally:
+        stop()
         print("Left encoder steps:", left_encoder.steps)
         print("Right encoder steps:", right_encoder.steps)
-        stop()

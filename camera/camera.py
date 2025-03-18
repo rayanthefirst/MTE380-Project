@@ -88,18 +88,18 @@ class Camera:
 
                 (x_min, y_min), (w_min, h_min), ang = blackbox
 
-                # if ang < -45:
-                #     ang = 90 + ang
-                # if w_min < h_min and ang > 0:
-                #     ang = (90 - ang) * -1
-                # if w_min > h_min and ang < 0:
-                #     ang = 90 + ang
+                if ang < -45:
+                    ang = 90 + ang
+                if w_min < h_min and ang > 0:
+                    ang = (90 - ang) * -1
+                if w_min > h_min and ang < 0:
+                    ang = 90 + ang
 
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
-
+                self.curr_error = error
                 ang = int(ang)
-
+                self.angle = ang
                 # Draw the bounding box using np.int32 instead of np.int0
                 box_pts = cv.boxPoints(blackbox)
                 box_pts = np.int32(box_pts)
