@@ -1,7 +1,7 @@
 
 from camera.camera import Camera
 from threading import Thread
-import time
+from time import sleep
 from driver.drive import *
 cam = Camera(camera_id=1)
 # cam.start_detection(display=True)
@@ -30,7 +30,7 @@ while True:
     else:
         # No red detected; stop the motors.
         stop()
-    time.sleep(0.5)
+    sleep(0.5)
 
 
 
