@@ -1,6 +1,6 @@
 
 from camera.camera import Camera
-# from threading import Thread
+from threading import Thread
 # from time import sleep
 from driver.drive import *
 cam = Camera(camera_id=0)
