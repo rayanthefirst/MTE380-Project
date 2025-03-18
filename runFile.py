@@ -2,7 +2,6 @@ from camera.camera import Camera
 
 def main():
     cam = Camera()
-    cam.init
     cam.start_detection(display=True)
     
 if __name__ == "__main__":
