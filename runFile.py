@@ -33,13 +33,3 @@ while True:
         # No red detected; stop the motors.
         stop()
     sleep(0.5)
-
-
-
-
-
-
-
-
-
-

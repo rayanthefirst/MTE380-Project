@@ -48,7 +48,6 @@ def turn(turn_right=True, error=0):
 
     left_motor.forward(speed=left_motor_speed)
     right_motor.backward(speed=right_motor_speed)
-    sleep(0.5)
 
 
 """
