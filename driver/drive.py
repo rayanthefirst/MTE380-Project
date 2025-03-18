@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from gpiozero import Motor, RotaryEncoder
 from time import sleep, time
-
+import math
 # Setup motor drivers.
 left_motor = Motor(forward=14, backward=15)
 right_motor = Motor(forward=12, backward=13)
@@ -11,7 +11,7 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.5
+SPEED = 0.75
 K_differential = 0.005
 # Calibration: encoder counts per degree of turn (experimentally determined).
 ENCODER_COUNTS_PER_DEGREE = 0.1
@@ -39,11 +39,11 @@ def stop():
 
 def turn(turn_right=True, error=0):
     if turn_right:
-        left_motor_speed  = SPEED + K_differential * error
-        right_motor_speed = SPEED - K_differential * error
+        left_motor_speed  = float(error / 240)
+        right_motor_speed = 1.0 - left_motor_speed
     else:
-        left_motor_speed  = SPEED - K_differential * error
-        right_motor_speed = SPEED + K_differential * error
+        right_motor_speed = float(error / 240)
+        left_motor_speed  = 1.0 - right_motor_speed
     left_motor.forward(speed=left_motor_speed)
     right_motor.backward(speed=right_motor_speed)
     sleep(0.5)
@@ -118,3 +118,7 @@ def test_spin():
         pass
 
     stop()
+
+
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))

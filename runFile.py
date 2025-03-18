@@ -24,11 +24,11 @@ while True:
             if cam.curr_error > 0:
                 # If error is positive, the red line is to the right.
                 # Turn right to adjust.
-                turn(turn_right=True, error=cam.curr_error)
+                turn(turn_right=True, error=abs(cam.curr_error))
             else:
                 # If error is negative, the red line is to the left.
                 # Turn left to adjust.
-                turn(turn_right=False, error=cam.curr_error)
+                turn(turn_right=False, error=abs(cam.curr_error))
     else:
         # No red detected; stop the motors.
         stop()
