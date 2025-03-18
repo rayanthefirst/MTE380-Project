@@ -3,7 +3,7 @@ from camera.camera import Camera
 from threading import Thread
 from time import sleep
 from driver.drive import *
-cam = Camera(camera_id=1)
+cam = Camera(camera_id=0)
 # cam.start_detection(display=True)
 cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
