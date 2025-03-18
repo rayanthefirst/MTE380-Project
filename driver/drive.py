@@ -11,7 +11,8 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.25
+SPEED = 0.5
+K_differential = 0.5
 # Calibration: encoder counts per degree of turn (experimentally determined).
 ENCODER_COUNTS_PER_DEGREE = 0.1
 
@@ -36,22 +37,18 @@ def stop():
     right_motor.stop()
     print("Motors stopped.")
 
-def pivot_turn(turn_right=True, degree=90):
-    """
-    Perform a pivot turn using encoder feedback.
+def turn(turn_right=True, error=0):
     
-    For a right pivot turn, both motors run forward; for a left pivot turn, both run backward.
-    The function waits until the encoder (using the left encoder in this example) registers 
-    enough counts corresponding to the desired angle.
-    """
-    target = degree
-
     if turn_right:
-        left_motor.forward(speed=SPEED/2)
-        right_motor.forward(speed=(SPEED/4))
+        left_motor_speed  = SPEED + K_differential * error
+        right_motor_speed = SPEED - K_differential * error
+        left_motor.forward(speed=left_motor_speed)
+        right_motor.forward(speed=right_motor_speed)
         sleep(0.5)
         direction = "right"
     else:
+        left_motor_speed  = SPEED - K_differential * error
+        right_motor_speed = SPEED + K_differential * error
         left_motor.backward(speed=(SPEED/4))
         right_motor.backward(speed=SPEED/2)
         sleep(0.5)

@@ -1,11 +1,11 @@
 
 from camera.camera import Camera
 from threading import Thread
-# from time import sleep
+from time import sleep
 from driver.drive import *
-cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
-cameraProcess.start()
+# cam = Camera(camera_id=0)
+# cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
+# cameraProcess.start()
 # Kp = 1
 # Ka = 1
 # error_threshold = 50
@@ -25,11 +25,11 @@ cameraProcess.start()
 #             if cam.curr_error > 0:
 #                 # If error is positive, the red line is to the right.
 #                 # Turn right to adjust.
-#                 pivot_turn(turn_right=True, degree=turn_angle)
+#                 turn(turn_right=True, degree=turn_angle)
 #             else:
 #                 # If error is negative, the red line is to the left.
 #                 # Turn left to adjust.
-#                 pivot_turn(turn_right=False, degree=turn_angle)
+#                 turn(turn_right=False, degree=turn_angle)
 #     else:
 #         # No red detected; stop the motors.
 #         stop()
@@ -40,8 +40,9 @@ cameraProcess.start()
 
 
 
+drive(forward=True)
+sleep(2)
 
 
-# test_spin()
 
 
