@@ -3,6 +3,7 @@ import numpy as np
 import math
 import time
 import os
+import keyboard
 
 class Camera:
     def __init__(self, camera_id=0):
@@ -135,6 +136,9 @@ class Camera:
         and save it to the given filename.
         """
 
+        filename = input("Enter the video filename (with extension, e.g. output.avi): ")
+        if not filename:
+            filename = "output.avi"
         
         # Get frame dimensions from the capture device
         width = int(self.cap.get(cv.CAP_PROP_FRAME_WIDTH))
@@ -155,14 +159,17 @@ class Camera:
                 break
 
             writer.write(frame)
-            
-            
-            if cv.waitKey(1) & 0xFF == ord('q'):
-                print("Recording stopped by user.")
-                break
-
             if display:
                 cv.imshow("Recording", frame)
+                if cv.waitKey(1) & 0xFF == ord('q'):
+                        print("Recording stopped by user.")
+                        break
+                
+            else:
+                if keyboard.is_pressed('q'):
+                    print("Recording stopped by user.")
+                    break
+
                
 
             if time.time() - start_time > duration:
