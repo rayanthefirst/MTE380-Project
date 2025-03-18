@@ -65,6 +65,22 @@ def pivot_turn(turn_right=True, degree=90):
     stop()
     print("Pivot turned {} {}°.".format(direction, degree))
 
+
+
+"""
+Test 1
+63 cm 
+time: 2.58388 s
+left encoder steps: 2649
+right encoder steps: 2618
+
+
+left constant = 42.048 encoder/cm
+right constant = 41.555 encoder/cm
+use smaller constant since the encoders measure at different points
+
+
+"""
 def determine_constants():
     """
     Determine the encoder counts per degree of turn for calibration.
@@ -84,6 +100,30 @@ def determine_constants():
     finally:
         elapsedTime = stopTime - startTime
         print("Elapsed time:", elapsedTime)
+        print("Left encoder steps:", left_encoder.steps)
+        print("Right encoder steps:", right_encoder.steps)
+        stop()
+
+
+RIGHT_ENCODER_CONSTANT = 41.555
+LEFT_ENCODER_CONSTANT = 42.048
+
+def test_encoder_const():
+    """
+    Test the encoder constants for the left and right motors.
+    """
+    left_encoder.reset()
+    right_encoder.reset()
+    drive(forward=True)
+    try:
+        while right_encoder.steps < 63 * RIGHT_ENCODER_CONSTANT:
+            print("Left encoder steps:", left_encoder.steps)
+            print("Right encoder steps:", right_encoder.steps)
+            sleep(1)
+    except KeyboardInterrupt:
+        stop()
+        print("Stopping the motors.")
+    finally:
         print("Left encoder steps:", left_encoder.steps)
         print("Right encoder steps:", right_encoder.steps)
         stop()
