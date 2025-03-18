@@ -49,15 +49,17 @@ def pivot_turn(turn_right=True, degree=90):
     if turn_right:
         left_motor.forward(speed=SPEED)
         right_motor.forward(speed=(SPEED/2))
+        sleep(0.5)
         direction = "right"
     else:
         left_motor.backward(speed=(SPEED/2))
         right_motor.backward(speed=SPEED)
+        sleep(0.5)
         direction = "left"
 
     # Use one encoder (e.g., left) to track the turn.
-    while abs(left_encoder.steps) < target:
-        sleep(0.001)
+    # while abs(left_encoder.steps) < target:
+    #     sleep(0.001)
 
     print("Pivot turned {} {}°.".format(direction, degree))
 
