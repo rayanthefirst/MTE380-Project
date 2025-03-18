@@ -42,24 +42,12 @@ def turn(turn_right=True, error=0):
     if turn_right:
         left_motor_speed  = SPEED + K_differential * error
         right_motor_speed = SPEED - K_differential * error
-        left_motor.forward(speed=left_motor_speed)
-        right_motor.forward(speed=right_motor_speed)
-        sleep(0.5)
-        direction = "right"
     else:
         left_motor_speed  = SPEED - K_differential * error
         right_motor_speed = SPEED + K_differential * error
-        left_motor.backward(speed=(SPEED/4))
-        right_motor.backward(speed=SPEED/2)
-        sleep(0.5)
-        direction = "left"
-
-    # Use one encoder (e.g., left) to track the turn.
-    # while abs(left_encoder.steps) < target:
-    #     sleep(0.001)
-
-    print("Pivot turned {} {}°.".format(direction, degree))
-
+    left_motor.forward(speed=left_motor_speed)
+    right_motor.backward(speed=right_motor_speed)
+    sleep(0.5)
 
 
 """
