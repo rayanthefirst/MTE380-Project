@@ -112,8 +112,6 @@ def test_encoder_const():
     """
     Test the encoder constants for the left and right motors.
     """
-    left_encoder.reset()
-    right_encoder.reset()
     drive(forward=True)
     try:
         while right_encoder.steps < 63 * RIGHT_ENCODER_CONSTANT:
