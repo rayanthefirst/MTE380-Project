@@ -39,12 +39,12 @@ def stop():
 
 def turn(turn_right=True, error=0):
     if turn_right:
-        right_motor_speed = min(SPEED, float(error / 240), 1.0 - float(error / 240))
+        right_motor_speed = min(SPEED, float(K_differential * error / 240), 1.0 - float(K_differential * error / 240))
         left_motor_speed  = max(SPEED, float(error / 240), 1.0 - float(error / 240))
 
     else:
-        left_motor_speed = min(SPEED, float(error / 240), 1.0 - float(error / 240))
-        right_motor_speed  = max(SPEED, float(error / 240), 1.0 - float(error / 240))
+        left_motor_speed = min(SPEED, float(K_differential * error / 240), 1.0 - float(K_differential * error / 240))
+        right_motor_speed  = max(SPEED, float(K_differential * error / 240), 1.0 - float(K_differential * error / 240))
        
     left_motor.forward(speed=left_motor_speed)
     right_motor.backward(speed=right_motor_speed)
