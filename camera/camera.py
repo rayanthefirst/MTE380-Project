@@ -18,10 +18,10 @@ class Camera:
         # self.red_upper = np.array([10, 255, 255])
         # self.red_lower_2 = np.array([160, 100, 100])
         # self.red_upper_2 = np.array([180, 255, 255])
-        self.red_lower = np.array([0, 0, 0])
-        self.red_upper = np.array([180, 255, 50])
-        self.red_lower_2 = np.array([0, 0, 0])
-        self.red_upper_2 = np.array([180, 255, 50])
+        self.red_lower = np.array([15, 100, 100])
+        self.red_upper = np.array([35, 255, 255])
+        self.red_lower_2 = np.array([15, 100, 100])
+        self.red_upper_2 = np.array([35, 255, 255])
         
         self.isRedLineDetected = False
         self.x_last = 0
@@ -49,8 +49,6 @@ class Camera:
             mask1 = cv.inRange(hsv, self.red_lower, self.red_upper)
             mask2 = cv.inRange(hsv, self.red_lower_2, self.red_upper_2)
             mask = cv.bitwise_or(mask1, mask2)
-            cv.imshow("mask", mask)
-
 
             # Step 2: Morphological ops to clean up the mask
             kernel = np.ones((3,3), np.uint8)
@@ -109,6 +107,9 @@ class Camera:
 
                 cv.line(frame, (int(x_min), 0), (int(x_min), frame.shape[0]),
                         (255, 0, 0), 2)
+                
+                cv.line(frame, (frame_center_x, 0), (frame_center_x, frame.shape[0]),
+                        (0, 255, 0), 2)
             else:
                 self.isRedLineDetected = False
 
