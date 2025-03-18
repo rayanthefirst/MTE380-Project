@@ -129,7 +129,7 @@ def test_encoder_const():
 def test_spin():
     startTime = time()
     left_motor.forward(speed=SPEED)
-    right_motor.backward(speed=SPEED)
+    right_motor.forward(speed=SPEED)
     while time() - startTime <= 5:
         pass
 
