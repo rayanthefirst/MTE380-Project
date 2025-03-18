@@ -11,7 +11,7 @@
 
 
 
-from driver.drive import determine_constants
+from driver.drive import determine_constants, test_encoder_const
 
 
-determine_constants()
+test_encoder_const()
