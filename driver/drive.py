@@ -1,65 +1,81 @@
 #!/usr/bin/env python3
-from gpiozero import Motor
-import time
+from gpiozero import Motor, RotaryEncoder
+from time import sleep
 
-# Set up the motors.
-# For the left motor, GPIO 14 is forward and GPIO 15 is backward.
-# For the right motor, GPIO 12 is forward and GPIO 13 is backward.
+# Setup motor drivers.
 left_motor = Motor(forward=14, backward=15)
 right_motor = Motor(forward=12, backward=13)
 
+# Setup encoders – update the GPIO pins as needed.
+# Here we use a RotaryEncoder for each motor.
+left_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
+right_encoder = RotaryEncoder(a=27, b=22, max_steps=0)
+
 SPEED = 0.5
-# Calibration constant: seconds per degree of turning.
-TURN_TIME_MULTIPLIER = 0.01
+# Calibration: encoder counts per degree of turn (experimentally determined).
+ENCODER_COUNTS_PER_DEGREE = 0.1
 
-def init():
-    """Initialize the motors (no extra GPIO setup needed for gpiozero)."""
-    print("Motors initialized using gpiozero.")
-
-def forward():
+def drive(forward=True):
     """
-    Drive the robot forward.
-    Left wheel runs forward and right wheel runs backward.
+    Drive the robot in a straight line.
+    For forward motion: left motor goes forward and right motor goes backward.
+    For backward motion, the directions are reversed.
     """
-    left_motor.forward(speed=SPEED)
-    right_motor.backward(speed=SPEED)
-    print("Motor running forward.")
-
-def backward():
-    """
-    Drive the robot backward.
-    Left wheel runs backward and right wheel runs forward.
-    """
-    left_motor.backward(speed=SPEED)
-    right_motor.forward(speed=SPEED)
-    print("Motor running backward.")
+    if forward:
+        left_motor.forward(speed=SPEED)
+        right_motor.backward(speed=SPEED)
+        print("Driving forward.")
+    else:
+        left_motor.backward(speed=SPEED)
+        right_motor.forward(speed=SPEED)
+        print("Driving backward.")
 
 def stop():
     """Stop both motors."""
     left_motor.stop()
     right_motor.stop()
-    print("Motor stopped.")
+    print("Motors stopped.")
 
-def turn_right(degree):
+def pivot_turn(turn_right=True, degree=90):
     """
-    Pivot right by running both wheels in the same direction.
-    For a right turn (clockwise), run both motors forward.
+    Perform a pivot turn using encoder feedback.
+    
+    For a right pivot turn, both motors run forward; for a left pivot turn, both run backward.
+    The function waits until the encoder (using the left encoder in this example) registers 
+    enough counts corresponding to the desired angle.
     """
-    duration = degree * TURN_TIME_MULTIPLIER
-    left_motor.forward(speed=SPEED)
-    right_motor.forward(speed=SPEED)
-    time.sleep(duration)
-    stop()
-    print("Turned right {}°.".format(degree))
+    target = degree * ENCODER_COUNTS_PER_DEGREE
+    # Reset encoder counts.
+    left_encoder.reset()
+    right_encoder.reset()
 
-def turn_left(degree):
-    """
-    Pivot left by running both wheels in the same direction.
-    For a left turn (counterclockwise), run both motors backward.
-    """
-    duration = degree * TURN_TIME_MULTIPLIER
-    left_motor.backward(speed=SPEED)
-    right_motor.backward(speed=SPEED)
-    time.sleep(duration)
+    if turn_right:
+        left_motor.forward(speed=SPEED)
+        right_motor.forward(speed=SPEED)
+        direction = "right"
+    else:
+        left_motor.backward(speed=SPEED)
+        right_motor.backward(speed=SPEED)
+        direction = "left"
+
+    # Use one encoder (e.g., left) to track the turn.
+    while abs(left_encoder.steps) < target:
+        sleep(0.001)
+
     stop()
-    print("Turned left {}°.".format(degree))
+    print("Pivot turned {} {}°.".format(direction, degree))
+
+def determine_constants():
+    """
+    Determine the encoder counts per degree of turn for calibration.
+    This function is used to experimentally determine the encoder counts per degree of turn.
+    """
+    try:
+        while True:
+            print("Left encoder steps:", left_encoder.steps)
+            print("Right encoder steps:", right_encoder.steps)
+            sleep(1)
+    except KeyboardInterrupt:
+        print("Stopping the motors...")
+    finally:
+        stop()

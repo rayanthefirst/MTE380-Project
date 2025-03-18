@@ -2,11 +2,12 @@ import cv2 as cv
 import numpy as np
 import math
 import time
+import os
 
 class Camera:
-    def __init__(self):
+    def __init__(self, camera_id=0):
         print("Camera initialized")
-        self.cap = cv.VideoCapture(1)
+        self.cap = cv.VideoCapture(camera_id)
         
         # Set resolution
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
@@ -18,21 +19,27 @@ class Camera:
         # self.red_upper = np.array([10, 255, 255])
         # self.red_lower_2 = np.array([160, 100, 100])
         # self.red_upper_2 = np.array([180, 255, 255])
-        self.red_lower = np.array([15, 100, 100])
-        self.red_upper = np.array([35, 255, 255])
-        self.red_lower_2 = np.array([15, 100, 100])
-        self.red_upper_2 = np.array([35, 255, 255])
+        self.red_lower = np.array([0, 0, 200])
+        self.red_upper = np.array([180, 30, 255])
+        self.red_lower_2 = np.array([0, 0, 200])
+        self.red_upper_2 = np.array([180, 30, 255])
         
         self.isRedLineDetected = False
-        self.x_last = 0
-        self.y_last = 0
-
+        self.angle= 0
         self.curr_error = 0
 
-    def start_detection(self, display=False):
+    def start_detection(self, display=False, video_filename=None):
         """
         Continuously capture frames and detect + track the red line contours.
         """
+        # Check if a valid video filename is provided and exists
+        if video_filename is not None and os.path.exists(video_filename):
+            self.cap.release()  # release the live feed if open
+            self.cap = cv.VideoCapture(video_filename)
+            print(f"Reading from file: {video_filename}")
+        else:
+            print("Using live feed")
+            
         while True:
             ret, frame = self.cap.read()
             if not ret:
@@ -81,12 +88,12 @@ class Camera:
 
                 (x_min, y_min), (w_min, h_min), ang = blackbox
 
-                if ang < -45:
-                    ang = 90 + ang
-                if w_min < h_min and ang > 0:
-                    ang = (90 - ang) * -1
-                if w_min > h_min and ang < 0:
-                    ang = 90 + ang
+                # if ang < -45:
+                #     ang = 90 + ang
+                # if w_min < h_min and ang > 0:
+                #     ang = (90 - ang) * -1
+                # if w_min > h_min and ang < 0:
+                #     ang = 90 + ang
 
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
@@ -121,3 +128,45 @@ class Camera:
 
         self.cap.release()
         cv.destroyAllWindows()
+
+    def record(self, filename="output.avi", duration=10, display=False):
+        """
+        Record a video from the camera for a specified duration (in seconds)
+        and save it to the given filename.
+        """
+
+        filename = input("Enter output filename (e.g., output.avi): ").strip()
+        if not filename:
+            filename = "output.avi"
+        # Get frame dimensions from the capture device
+        width = int(self.cap.get(cv.CAP_PROP_FRAME_WIDTH))
+        height = int(self.cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+        fps = self.cap.get(cv.CAP_PROP_FPS) or 30  # default to 30 if FPS not available
+
+        # Define the codec and create VideoWriter object
+        fourcc = cv.VideoWriter_fourcc(*"XVID")
+        writer = cv.VideoWriter(f"media/{filename}", fourcc, fps, (width, height))
+
+        start_time = time.time()
+        print(f"Recording started. Saving to {filename}")
+
+        while True:
+            ret, frame = self.cap.read()
+            if not ret:
+                print("Failed to capture frame")
+                break
+
+            writer.write(frame)
+
+            if display:
+                cv.imshow("Recording", frame)
+                if cv.waitKey(1) & 0xFF == ord('q'):
+                    print("Recording stopped by user.")
+                    break
+
+            if time.time() - start_time > duration:
+                print("Recording completed by duration.")
+                break
+
+        writer.release()
+        cv.destroyWindow("Recording")
