@@ -40,7 +40,8 @@ from driver.drive import *
 
 
 
-drive(forward=False)
+# drive(forward=False)
+turn(turn_right=True, error=80)
 sleep(2)
 
 
