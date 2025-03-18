@@ -49,5 +49,5 @@ from camera.camera import Camera
 
 cam = Camera()
 # cam.start_detection(display=True, video_filename="media/test.avi")
-cam.record("test.avi", 1000, True)
+cam.record("test.avi", 1000, False)
 
