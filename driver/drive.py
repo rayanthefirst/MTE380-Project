@@ -44,7 +44,7 @@ def pivot_turn(turn_right=True, degree=90):
     The function waits until the encoder (using the left encoder in this example) registers 
     enough counts corresponding to the desired angle.
     """
-    target = degree * ENCODER_COUNTS_PER_DEGREE
+    target = degree
 
     if turn_right:
         left_motor.forward(speed=SPEED)
