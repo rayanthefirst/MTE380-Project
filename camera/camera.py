@@ -33,12 +33,12 @@ class Camera:
         Continuously capture frames and detect + track the red line contours.
         """
         # Check if a valid video filename is provided and exists
-        if video_filename is not None and os.path.exists(video_filename):
-            self.cap.release()  # release the live feed if open
-            self.cap = cv.VideoCapture(video_filename)
-            print(f"Reading from file: {video_filename}")
-        else:
-            print("Using live feed")
+        # if video_filename is not None and os.path.exists(video_filename):
+        #     self.cap.release()  # release the live feed if open
+        #     self.cap = cv.VideoCapture(video_filename)
+        #     print(f"Reading from file: {video_filename}")
+        # else:
+        #     print("Using live feed")
             
         while True:
             ret, frame = self.cap.read()
