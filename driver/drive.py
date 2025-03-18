@@ -130,7 +130,7 @@ def test_spin():
     startTime = time()
     left_motor.forward(speed=SPEED)
     right_motor.backward(speed=SPEED)
-    while time() - startTime > 5:
+    while time() - startTime <= 5:
         pass
 
     stop()
