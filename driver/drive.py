@@ -38,7 +38,6 @@ def stop():
     print("Motors stopped.")
 
 def turn(turn_right=True, error=0):
-    
     if turn_right:
         left_motor_speed  = SPEED + K_differential * error
         right_motor_speed = SPEED - K_differential * error
