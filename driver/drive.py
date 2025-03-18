@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from gpiozero import Motor, RotaryEncoder
-from time import sleep
+from time import sleep, time
 
 # Setup motor drivers.
 left_motor = Motor(forward=14, backward=15)
@@ -71,13 +71,19 @@ def determine_constants():
     This function is used to experimentally determine the encoder counts per degree of turn.
     """
     try:
+        startTime = time()
         drive(forward=True) 
         while True:
             print("Left encoder steps:", left_encoder.steps)
             print("Right encoder steps:", right_encoder.steps)
             sleep(1)
     except KeyboardInterrupt:
+        stopTime = time()
         stop()
         print("Stopping the motors...")
     finally:
+        elapsedTime = stopTime - startTime
+        print("Elapsed time:", elapsedTime)
+        print("Left encoder steps:", left_encoder.steps)
+        print("Right encoder steps:", right_encoder.steps)
         stop()
