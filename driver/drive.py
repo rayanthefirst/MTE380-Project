@@ -51,10 +51,10 @@ def pivot_turn(turn_right=True, degree=90):
 
     if turn_right:
         left_motor.forward(speed=SPEED)
-        right_motor.forward(speed=SPEED)
+        right_motor.forward(speed=(SPEED/2))
         direction = "right"
     else:
-        left_motor.backward(speed=SPEED)
+        left_motor.backward(speed=(SPEED/2))
         right_motor.backward(speed=SPEED)
         direction = "left"
 
