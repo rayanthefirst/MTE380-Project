@@ -135,9 +135,7 @@ class Camera:
         and save it to the given filename.
         """
 
-        filename = input("Enter output filename (e.g., output.avi): ").strip()
-        if not filename:
-            filename = "output.avi"
+        
         # Get frame dimensions from the capture device
         width = int(self.cap.get(cv.CAP_PROP_FRAME_WIDTH))
         height = int(self.cap.get(cv.CAP_PROP_FRAME_HEIGHT))
@@ -157,12 +155,15 @@ class Camera:
                 break
 
             writer.write(frame)
+            
+            
+            if cv.waitKey(1) & 0xFF == ord('q'):
+                print("Recording stopped by user.")
+                break
 
             if display:
                 cv.imshow("Recording", frame)
-                if cv.waitKey(1) & 0xFF == ord('q'):
-                    print("Recording stopped by user.")
-                    break
+               
 
             if time.time() - start_time > duration:
                 print("Recording completed by duration.")
