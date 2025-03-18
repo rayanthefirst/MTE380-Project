@@ -8,8 +8,8 @@ right_motor = Motor(forward=12, backward=13)
 
 # Setup encoders – update the GPIO pins as needed.
 # Here we use a RotaryEncoder for each motor.
-left_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
-right_encoder = RotaryEncoder(a=27, b=22, max_steps=0)
+left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
+right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
 SPEED = 0.5
 # Calibration: encoder counts per degree of turn (experimentally determined).
