@@ -59,7 +59,6 @@ def pivot_turn(turn_right=True, degree=90):
     while abs(left_encoder.steps) < target:
         sleep(0.001)
 
-    stop()
     print("Pivot turned {} {}°.".format(direction, degree))
 
 
