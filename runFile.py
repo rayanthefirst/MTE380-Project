@@ -30,6 +30,7 @@ while True:
                 # If error is negative, the red line is to the left.
                 # Turn left to adjust.
                 pivot_turn(turn_right=False, degree=turn_angle)
+            print("HELLLOOOOO")
     # else:
     #     # No red detected; stop the motors.
     #     stop()
