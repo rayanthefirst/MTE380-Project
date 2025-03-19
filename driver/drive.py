@@ -11,7 +11,7 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.25
+SPEED = 0.1
 K_differential = 0.01
 # Calibration: encoder counts per degree of turn (experimentally determined).
 ENCODER_COUNTS_PER_DEGREE = 0.1
@@ -41,10 +41,12 @@ def turn(turn_right=True, error=0):
     if turn_right:
         right_motor_speed = SPEED * ((K_differential * error) / 240)
         left_motor_speed  = SPEED
+        print("motor speed, right turn :", right_motor_speed)
 
     else:
         left_motor_speed = SPEED * ((K_differential * error) / 240)
         right_motor_speed  = SPEED
+        print("motor speed, left turn :", left_motor_speed)
        
     left_motor.forward(speed=left_motor_speed)
     right_motor.backward(speed=right_motor_speed)
