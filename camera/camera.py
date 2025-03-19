@@ -12,7 +12,7 @@ class Camera:
         # Set resolution
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
         self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
-        self.cap.set(cv.CAP_PROP_FPS, 15)
+        self.cap.set(cv.CAP_PROP_FPS, 30)
 
         # Define HSV range for red color – same as your original code
         # self.red_lower = np.array([0, 100, 100])
