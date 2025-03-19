@@ -15,14 +15,14 @@ class Camera:
         self.cap.set(cv.CAP_PROP_FPS, 10)
 
         # Define HSV range for red color – same as your original code
-        # self.red_lower = np.array([0, 100, 100])
-        # self.red_upper = np.array([10, 255, 255])
-        # self.red_lower_2 = np.array([160, 100, 100])
+        self.red_lower = np.array([0, 100, 100])
+        self.red_upper = np.array([10, 255, 255])
+        self.red_lower_2 = np.array([160, 100, 100])
         # self.red_upper_2 = np.array([180, 255, 255])
-        self.red_lower = np.array([0, 0, 200])
-        self.red_upper = np.array([180, 55, 255])
-        self.red_lower_2 = np.array([0, 0, 200])
-        self.red_upper_2 = np.array([180, 55, 255])
+        # self.red_lower = np.array([0, 0, 200])
+        # self.red_upper = np.array([180, 55, 255])
+        # self.red_lower_2 = np.array([0, 0, 200])
+        # self.red_upper_2 = np.array([180, 55, 255])
 
         
         self.isRedLineDetected = False
