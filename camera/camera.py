@@ -10,7 +10,7 @@ class Camera:
         self.cap = cv.VideoCapture(camera_id)
         
         # Set resolution
-        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 480)
+        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 400)
         self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 240)
         self.cap.set(cv.CAP_PROP_FPS, 10)
 
