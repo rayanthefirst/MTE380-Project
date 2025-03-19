@@ -8,7 +8,7 @@ cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
 Kp = 1
 Ka = 1
-error_threshold = 20
+error_threshold = 50
 
 while True:
     if cam.isRedLineDetected:
