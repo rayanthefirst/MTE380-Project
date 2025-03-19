@@ -13,6 +13,8 @@ error_threshold = 50
 while True:
     if cam.isRedLineDetected:
         print("Red line detected")
+
+        print(cam.curr_error)
         
         if abs(cam.curr_error) < error_threshold:
             print("Error small; driving forward.")
