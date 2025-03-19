@@ -58,9 +58,9 @@ class Camera:
             mask = cv.bitwise_or(mask1, mask2)
 
             # Step 2: Morphological ops to clean up the mask
-            kernel = np.ones((3,3), np.uint8)
-            mask = cv.erode(mask, kernel, iterations=3)
-            mask = cv.dilate(mask, kernel, iterations=5)
+            # kernel = np.ones((3,3), np.uint8)
+            # mask = cv.erode(mask, kernel, iterations=3)
+            # mask = cv.dilate(mask, kernel, iterations=5)
             if display:
                 cv.imshow("mask2", mask)
 
