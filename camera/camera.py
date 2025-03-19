@@ -10,8 +10,8 @@ class Camera:
         self.cap = cv.VideoCapture(camera_id)
         
         # Set resolution
-        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 640)
-        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
+        self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 320)
+        self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 240)
         self.cap.set(cv.CAP_PROP_FPS, 10)
 
         # Define HSV range for red color – same as your original code
@@ -47,7 +47,7 @@ class Camera:
                 break
 
             # Optionally resize to a square if you want consistency
-            frame = cv.resize(frame, (480, 480))
+            # frame = cv.resize(frame, (480, 480))
 
             # Convert BGR -> HSV
             hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
