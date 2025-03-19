@@ -11,11 +11,9 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.2
-TURN_SPEED = 0.5
+SPEED = 0.1
+TURN_SPEED = 0.1
 K_differential = 0.01
-# Calibration: encoder counts per degree of turn (experimentally determined).
-ENCODER_COUNTS_PER_DEGREE = 0.1
 
 def drive(forward=True):
     """
