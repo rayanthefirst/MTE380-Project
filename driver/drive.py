@@ -25,28 +25,28 @@ def drive(forward=True):
     if forward:
         left_motor.forward(speed=SPEED)
         right_motor.backward(speed=SPEED)
-        print("Driving forward.")
+        # print("Driving forward.")
     else:
         left_motor.backward(speed=SPEED)
         right_motor.forward(speed=SPEED)
-        print("Driving backward.")
+        # print("Driving backward.")
 
 def stop():
     """Stop both motors."""
     left_motor.stop()
     right_motor.stop()
-    print("Motors stopped.")
+    # print("Motors stopped.")
 
 def turn(turn_right=True, error=0):
     if turn_right:
         right_motor_speed = SPEED * ((K_differential * error) / 240)
         left_motor_speed  = SPEED
-        print("motor speed, right turn :", right_motor_speed)
+        # print("motor speed, right turn :", right_motor_speed)
 
     else:
         left_motor_speed = SPEED * ((K_differential * error) / 240)
         right_motor_speed  = SPEED
-        print("motor speed, left turn :", left_motor_speed)
+        # print("motor speed, left turn :", left_motor_speed)
        
     left_motor.forward(speed=left_motor_speed)
     right_motor.backward(speed=right_motor_speed)
