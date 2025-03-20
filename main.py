@@ -12,7 +12,7 @@ MAX_SPEED = 0.6
 error_threshold = 50
 
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
 cameraProcess.start()
 
 integral = 0
@@ -22,8 +22,8 @@ prev_error = 0
 dt = 1/cam.fps
 
 kp = 1
-ki = 0
-kd = 0
+ki = 1
+kd = 1
 
 while True:
     if cam.isRedLineDetected:
@@ -52,14 +52,17 @@ while True:
                 # If error is negative, turn left
                 speed_left = (MAX_SPEED/2) - speedDelta
                 speed_right = (MAX_SPEED/2) + speedDelta
+                print("Speed left: ", speed_left)
+                print("Speed right: ", speed_right)
 
-            drive(speedLeft=speed_left, speedRight=speed_right)
+            # drive(speedLeft=speed_left, speedRight=speed_right)
             
         else:
             integral = 0
             derivative = 0
             # If error is small, drive forward.
-            drive(speedLeft=(MAX_SPEED/2), speedRight=(MAX_SPEED/2), forward=True)
+            # drive(speedLeft=(MAX_SPEED/2), speedRight=(MAX_SPEED/2), forward=True)
+            print('speed left: ', (MAX_SPEED/2))    
         
     else:
         # No red detected; stop the motors.
