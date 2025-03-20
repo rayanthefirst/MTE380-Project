@@ -38,7 +38,7 @@ while True:
 
             p_out = kp * curr_error
             d_out = kd * derivative
-            output = p_out + d_out  # No integral term yet
+            output = p_out + d_out 
 
             # Scale output to voltage
             speedDelta = min(MAX_SPEED / 2, abs(output))
@@ -58,5 +58,4 @@ while True:
             derivative = 0
             drive(speedLeft=(MAX_SPEED / 2), speedRight=(MAX_SPEED / 2), forward=True)
     else:
-        # No red detected; stop the motors.
         stop()
