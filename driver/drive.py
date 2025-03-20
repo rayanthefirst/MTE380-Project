@@ -13,12 +13,8 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-MAX_SPEED = -0.1
-
-kp = 0
-ki = 0
-kd = 0
-
+# SPEED IS RESTRICTED BETWEEN 0 AND 1
+MAX_SPEED = 0.1
 
 def drive(forward=True):
     """
@@ -50,16 +46,15 @@ def turn(turn_right=True, error=0, integral=0, derivative=0):
     # scaling to input speed
 
     if turn_right:
-        right_motor_speed = MAX_SPEED * ((kd * error) / 160)
-        left_motor_speed  = MAX_SPEEDkp = 0
+        right_motor_speed = 
+        left_motor_speed  = ...
         ki = 0
         
         # print("motor speed, right turn :", right_motor_speed)
 
     else:
-        left_motor_speed = MAX_SPEED * ((kd * error) / 160)
-        right_motor_speed  = MAX_SPEEDkp = 0
-        ki = 0
+        left_motor_speed = ...
+        right_motor_speed  = ...
         
         # print("motor speed, left turn :", left_motor_speed)
        

@@ -27,12 +27,7 @@ class Camera:
 
         
         self.isRedLineDetected = False
-        self.angle= 0
         self.curr_error = 0
-        self.prev_error = 0
-        self.dt = 1/self.fps
-        self.integral = 0
-        self.derivative = 0
 
 
     def start_detection(self, display=False, video_filename=None):
@@ -108,13 +103,9 @@ class Camera:
                 # Frame.shape //2 returns 160 on 320x240 frame when run on logicam, and 320 on 640x480 frame when run on surface 7 webcam
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
-                self.integral += error * self.dt
-                self.derivative = (error - self.prev_error) / self.dt
 
                 # update error values
-                self.prev_error = self.curr_error
                 self.curr_error = error
-                self.angle = ang
                 # Draw the bounding box using np.int32 instead of np.int0
                 box_pts = cv.boxPoints(blackbox)
                 box_pts = np.int32(box_pts)
