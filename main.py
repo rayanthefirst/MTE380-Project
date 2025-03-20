@@ -22,8 +22,8 @@ prev_error = 0
 dt = 1/cam.fps
 
 kp = 1
-ki = 1
-kd = 1
+ki = 0
+kd = 0
 
 while True:
     if cam.isRedLineDetected:
