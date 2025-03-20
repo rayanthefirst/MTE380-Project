@@ -6,7 +6,7 @@ from utils import scale_input
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
 # From voltage test
-MAX_SPEED = 0.6
+MAX_SPEED = 0.2
 
 # From straight line test
 error_threshold = 50
@@ -24,9 +24,12 @@ dt = 1/cam.fps
 # max_error = cam.width/2
 # max_derivative = cam.width/dt
 
-kp = float(input("Enter kp value: "))
-if not kp:
+kp = input("Enter kp value: ")
+if not input:
     kp = 1.875 * 10^-3
+else:
+    kp = float(kp)
+
 ki = 0
 kd = 0
 
