@@ -9,10 +9,11 @@ class Camera:
         print("Camera initialized")
         self.cap = cv.VideoCapture(camera_id)
         
+        self.fps = 10
         # Set resolution
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, 320)
         self.cap.set(cv.CAP_PROP_FRAME_HEIGHT, 240)
-        self.cap.set(cv.CAP_PROP_FPS, 10)
+        self.cap.set(cv.CAP_PROP_FPS, self.fps)
 
         # Define HSV range for red color – same as your original code
         self.red_lower = np.array([0, 100, 100])
@@ -23,10 +24,14 @@ class Camera:
         # self.red_upper = np.array([180, 55, 255])
         # self.red_lower_2 = np.array([0, 0, 200])
         # self.red_upper_2 = np.array([180, 55, 255])
+
         
         self.isRedLineDetected = False
         self.angle= 0
         self.curr_error = 0
+        self.prev_error = 0
+        self.dt = 1/self.fps
+
 
     def start_detection(self, display=False, video_filename=None):
         """
@@ -60,7 +65,7 @@ class Camera:
             # Step 2: Morphological ops to clean up the mask
             # kernel = np.ones((3,3), np.uint8)
             # mask = cv.erode(mask, kernel, iterations=3)
-            # mask = cv.dilate(mask, kernel, iterations=5)
+            # mask = cv.dilate(mask, kernel, iterations=10)
             if display:
                 cv.imshow("mask2", mask)
 
@@ -98,6 +103,7 @@ class Camera:
 
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
+                self.prev_error = self.curr_error
                 self.curr_error = error
                 ang = int(ang)
                 self.angle = ang
