@@ -25,6 +25,8 @@ dt = 1/cam.fps
 # max_derivative = cam.width/dt
 
 kp = float(input("Enter kp value: "))
+if not kp:
+    kp = 1.875 * 10^-3
 ki = 0
 kd = 0
 
