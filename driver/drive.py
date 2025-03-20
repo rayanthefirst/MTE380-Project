@@ -13,7 +13,7 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-MAX_SPEED = 0.1
+MAX_SPEED = -0.1
 
 kp = 0
 ki = 0
