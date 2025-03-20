@@ -40,7 +40,7 @@ while True:
             output = p_out + d_out 
 
             # Scale output to voltage
-            speedDelta = min(MAX_SPEED / 2, abs(output))
+            speedDelta = min(MAX_SPEED / 3, abs(output))
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
