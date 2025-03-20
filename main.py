@@ -3,7 +3,7 @@ from threading import Thread
 from driver.drive import *
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
-MAX_SPEED = 0.2
+MAX_SPEED = 0.185
 
 # From straight line test
 error_threshold = 50
@@ -30,7 +30,7 @@ while True:
         curr_error = cam.curr_error
 
         if abs(curr_error) > error_threshold:
-            print("Error large; adjusting turn.")
+            # print("Error large; adjusting turn.")
 
             # Compute PID terms
             derivative = (curr_error - prev_error) / dt
