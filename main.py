@@ -3,7 +3,7 @@ from threading import Thread
 from driver.drive import *
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
-MAX_SPEED = 0.18
+MAX_SPEED = 0.2
 
 # From straight line test
 error_threshold = 50
