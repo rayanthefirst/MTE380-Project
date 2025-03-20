@@ -60,8 +60,8 @@ while True:
                 # If error is negative, turn left
                 speed_left = (MAX_SPEED/2) - speedDelta
                 speed_right = (MAX_SPEED/2) + speedDelta
-            print("Speed left: ", speed_left)
-            print("Speed right: ", speed_right)
+            # print("Speed left: ", speed_left)
+            # print("Speed right: ", speed_right)
 
             drive(speedLeft=speed_left, speedRight=speed_right)
             
@@ -70,7 +70,7 @@ while True:
             derivative = 0
             # If error is small, drive forward.
             drive(speedLeft=(MAX_SPEED/2), speedRight=(MAX_SPEED/2), forward=True)
-            print('speed left: ', (MAX_SPEED/2))    
+            # print('speed left: ', (MAX_SPEED/2))    
         
     else:
         # No red detected; stop the motors.
