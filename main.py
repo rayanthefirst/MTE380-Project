@@ -21,10 +21,10 @@ curr_error = 0
 prev_error = 0
 dt = 1/cam.fps
 
-# max_error = cam.width/2
+max_error = cam.width/2
 # max_derivative = cam.width/dt
 
-kp = 0.001875
+kp = (MAX_SPEED / (max_error * 2)) 
 ki = 0
 kd = float(input("Enter kp value: "))
 
