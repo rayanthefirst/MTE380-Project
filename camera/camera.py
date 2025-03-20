@@ -103,13 +103,17 @@ class Camera:
                 if w_min > h_min and ang < 0:
                     ang = 90 + ang
 
+                ang = int(ang)
+                print("HEIIIEIEIEIE", frame.shape[1]//2)
+
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
                 self.integral += error * self.dt
                 self.derivative = (error - self.prev_error) / self.dt
+
+                # update error values
                 self.prev_error = self.curr_error
                 self.curr_error = error
-                ang = int(ang)
                 self.angle = ang
                 # Draw the bounding box using np.int32 instead of np.int0
                 box_pts = cv.boxPoints(blackbox)
