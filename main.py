@@ -45,12 +45,12 @@ while True:
             # Adjust PID Speed for right and left
             if curr_error > 0:
                 # If error is positive, turn right
-                speed_left = (MAX_SPEED / 2) + speedDelta
-                speed_right = (MAX_SPEED / 2) - speedDelta
+                speed_left = (MAX_SPEED / 3) + speedDelta
+                speed_right = (MAX_SPEED / 3) - speedDelta
             else:
                 # If error is negative, turn left
-                speed_left = (MAX_SPEED / 2) - speedDelta
-                speed_right = (MAX_SPEED / 2) + speedDelta
+                speed_left = (MAX_SPEED / 3) - speedDelta
+                speed_right = (MAX_SPEED / 3) + speedDelta
 
             drive(speedLeft=speed_left, speedRight=speed_right)
         else:
