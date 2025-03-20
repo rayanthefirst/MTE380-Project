@@ -3,7 +3,7 @@ from threading import Thread
 from driver.drive import *
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
-MAX_SPEED = 0.2
+MAX_SPEED = 0.25
 
 # From straight line test
 error_threshold = 50
@@ -22,7 +22,7 @@ max_error = cam.width / 2
 
 ki = 0  # Keeping integral disabled for now
 kp = (MAX_SPEED / max_error) * 1.05  # Increase KP for better response
-kd = 0.04  # Reduce KD to prevent stopping at turns
+kd = 0.09  # Reduce KD to prevent stopping at turns
 
 while True:
     if cam.isRedLineDetected:
