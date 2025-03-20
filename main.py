@@ -21,6 +21,9 @@ curr_error = 0
 prev_error = 0
 dt = 1/cam.fps
 
+max_error = cam.width/2
+max_derivative = cam.width/dt
+
 kp = 10^-5
 ki = 0
 kd = 0
@@ -41,7 +44,7 @@ while True:
             output = p_out + i_out + d_out
 
             # Scale output to voltage
-            speedDelta = scale_input(output, (MAX_SPEED/2))
+            speedDelta = min(MAX_SPEED / 2, scale_input(output, max_error))
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
@@ -55,13 +58,13 @@ while True:
             print("Speed left: ", speed_left)
             print("Speed right: ", speed_right)
 
-            # drive(speedLeft=speed_left, speedRight=speed_right)
+            drive(speedLeft=speed_left, speedRight=speed_right)
             
         else:
             integral = 0
             derivative = 0
             # If error is small, drive forward.
-            # drive(speedLeft=(MAX_SPEED/2), speedRight=(MAX_SPEED/2), forward=True)
+            drive(speedLeft=(MAX_SPEED/2), speedRight=(MAX_SPEED/2), forward=True)
             print('speed left: ', (MAX_SPEED/2))    
         
     else:
