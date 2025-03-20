@@ -21,7 +21,7 @@ curr_error = 0
 prev_error = 0
 dt = 1/cam.fps
 
-kp = 0.0001
+kp = 10^-5
 ki = 0
 kd = 0
 
