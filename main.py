@@ -3,7 +3,7 @@ from threading import Thread
 from driver.drive import *
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
-MAX_SPEED = 0.2
+MAX_SPEED = 0.15
 
 # From straight line test
 error_threshold = 50
@@ -57,4 +57,4 @@ while True:
             derivative = 0
             drive(speedLeft=(MAX_SPEED / 2), speedRight=(MAX_SPEED / 2), forward=True)
     else:
-        drive(speedLeft=0.2, speedRight=-0.2)
+        stop()
