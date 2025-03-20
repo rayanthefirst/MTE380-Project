@@ -104,8 +104,8 @@ class Camera:
                     ang = 90 + ang
 
                 ang = int(ang)
-                print("HEIIIEIEIEIE", frame.shape[1]//2)
 
+                # Frame.shape //2 returns 160 on 320x240 frame when run on logicam, and 320 on 640x480 frame when run on surface 7 webcam
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
                 self.integral += error * self.dt
