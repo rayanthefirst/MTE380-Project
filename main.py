@@ -24,7 +24,7 @@ dt = 1/cam.fps
 # max_error = cam.width/2
 # max_derivative = cam.width/dt
 
-kp = 1.875 * 10^-3
+kp = 0.001875
 ki = 0
 kd = input("Enter kp value: ")
 
