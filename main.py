@@ -22,7 +22,7 @@ max_error = cam.width / 2
 
 ki = 0  # Keeping integral disabled for now
 kp = (MAX_SPEED / max_error) * 1  # Increase KP for better response
-kd = 0.1  # Reduce KD to prevent stopping at turns
+kd = 0  # Reduce KD to prevent stopping at turns
 
 while True:
     if cam.isRedLineDetected:
@@ -40,17 +40,17 @@ while True:
             output = p_out + d_out 
 
             # Scale output to voltage
-            speedDelta = min(MAX_SPEED / 3.75, abs(output))
+            speedDelta = min(MAX_SPEED / 4, abs(output))
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
                 # If error is positive, turn right
-                speed_left = (MAX_SPEED / 3.75) + speedDelta
-                speed_right = (MAX_SPEED / 3.75) - speedDelta
+                speed_left = (MAX_SPEED / 4) + speedDelta
+                speed_right = (MAX_SPEED / 4) - speedDelta
             else:
                 # If error is negative, turn left
-                speed_left = (MAX_SPEED / 3.75) - speedDelta
-                speed_right = (MAX_SPEED / 3.75) + speedDelta
+                speed_left = (MAX_SPEED / 4) - speedDelta
+                speed_right = (MAX_SPEED / 4) + speedDelta
 
             drive(speedLeft=speed_left, speedRight=speed_right)
         else:
