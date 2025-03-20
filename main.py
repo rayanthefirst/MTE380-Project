@@ -21,7 +21,7 @@ dt = 1 / cam.fps  # Time step based on camera frame rate
 max_error = cam.width / 2
 
 ki = 0  # Keeping integral disabled for now
-kp = (MAX_SPEED / max_error) * 1.01  # Increase KP for better response
+kp = (MAX_SPEED / max_error) * 1.0  # Increase KP for better response
 kd = 0.0019  # Reduce KD to prevent stopping at turns
 
 while True:
