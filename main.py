@@ -23,7 +23,7 @@ max_error = cam.width / 2
 # PID Gains
 kp = MAX_SPEED / max_error  # Proportional gain
 ki = 0  # Keeping integral disabled for now
-kd = 0.01  # Small derivative gain (tune this value)
+kd = 0.08  # Small derivative gain (tune this value)
 
 while True:
     if cam.isRedLineDetected:
