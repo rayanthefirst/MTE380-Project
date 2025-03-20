@@ -57,4 +57,4 @@ while True:
             derivative = 0
             drive(speedLeft=(MAX_SPEED / 2), speedRight=(MAX_SPEED / 2), forward=True)
     else:
-        drive(speedLeft=speed_left, speedRight=-speed_right)
+        drive(speedLeft=0.2, speedRight=-0.2)
