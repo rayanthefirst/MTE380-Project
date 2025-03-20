@@ -1,5 +1,4 @@
-import math
+import numpy as np
 
-def scale_input(x, uppder_bound=1):
-    # This function maps any real x to a value between 0 and 0.3 using a sigmoid formulation.
-    return uppder_bound / (1 + math.exp(-x))
+def scale_input(x, upper_bound=1):
+    return upper_bound / (1 + np.exp(-x))
