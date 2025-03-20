@@ -24,7 +24,7 @@ dt = 1/cam.fps
 max_error = cam.width/2
 max_derivative = cam.width/dt
 
-kp = 10^-5
+kp = float(input("Enter kp value: "))
 ki = 0
 kd = 0
 
@@ -44,7 +44,7 @@ while True:
             output = p_out + i_out + d_out
 
             # Scale output to voltage
-            speedDelta = min(MAX_SPEED / 2, scale_input(output, max_error))
+            speedDelta = min(MAX_SPEED / 2, output)
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
