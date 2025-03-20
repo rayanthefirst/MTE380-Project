@@ -26,7 +26,7 @@ dt = 1/cam.fps
 
 kp = 0.001875
 ki = 0
-kd = input("Enter kp value: ")
+kd = float(input("Enter kp value: "))
 
 while True:
     if cam.isRedLineDetected:
