@@ -11,9 +11,12 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.1
-TURN_SPEED = 0.1
-K_differential = 0.01
+MAX_SPEED = 0.1
+
+kp = 0
+ki = 0
+kd = 0
+
 
 def drive(forward=True):
     """
@@ -22,12 +25,12 @@ def drive(forward=True):
     For backward motion, the directions are reversed.
     """
     if forward:
-        left_motor.forward(speed=SPEED)
-        right_motor.backward(speed=SPEED)
+        left_motor.forward(speed=MAX_SPEED)
+        right_motor.backward(speed=MAX_SPEED)
         # print("Driving forward.")
     else:
-        left_motor.backward(speed=SPEED)
-        right_motor.forward(speed=SPEED)
+        left_motor.backward(speed=MAX_SPEED)
+        right_motor.forward(speed=MAX_SPEED)
         # print("Driving backward.")
 
 def stop():
@@ -36,15 +39,26 @@ def stop():
     right_motor.stop()
     # print("Motors stopped.")
 
-def turn(turn_right=True, error=0):
+def turn(turn_right=True, error=0, integral=0, derivative=0):
+    # calculate pid
+    p_out = kp * error
+    i_out = ki * integral
+    d_out = kd * derivative
+    output = p_out + i_out + d_out
+    # scaling to input speed
+
     if turn_right:
-        right_motor_speed = TURN_SPEED * ((K_differential * error) / 160)
-        left_motor_speed  = TURN_SPEED
+        right_motor_speed = MAX_SPEED * ((kd * error) / 160)
+        left_motor_speed  = MAX_SPEEDkp = 0
+        ki = 0
+        
         # print("motor speed, right turn :", right_motor_speed)
 
     else:
-        left_motor_speed = TURN_SPEED * ((K_differential * error) / 160)
-        right_motor_speed  = TURN_SPEED
+        left_motor_speed = MAX_SPEED * ((kd * error) / 160)
+        right_motor_speed  = MAX_SPEEDkp = 0
+        ki = 0
+        
         # print("motor speed, left turn :", left_motor_speed)
        
     left_motor.forward(speed=left_motor_speed)
@@ -114,13 +128,9 @@ def test_encoder_const():
 
 def test_spin():
     startTime = time()
-    left_motor.forward(speed=SPEED)
-    right_motor.forward(speed=SPEED)
+    left_motor.forward(speed=MAX_SPEED)
+    right_motor.forward(speed=MAX_SPEED)
     while time() - startTime <= 2:
         pass
 
     stop()
-
-
-def sigmoid(x):
-    return 1 / (1 + math.exp(-x))

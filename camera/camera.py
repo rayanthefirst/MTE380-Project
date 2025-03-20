@@ -31,6 +31,8 @@ class Camera:
         self.curr_error = 0
         self.prev_error = 0
         self.dt = 1/self.fps
+        self.integral = 0
+        self.derivative = 0
 
 
     def start_detection(self, display=False, video_filename=None):
@@ -103,6 +105,8 @@ class Camera:
 
                 frame_center_x = frame.shape[1] // 2
                 error = int(x_min - frame_center_x)
+                self.integral += error * self.dt
+                self.derivative = (error - self.prev_error) / self.dt
                 self.prev_error = self.curr_error
                 self.curr_error = error
                 ang = int(ang)
