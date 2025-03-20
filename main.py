@@ -22,7 +22,7 @@ max_error = cam.width / 2
 
 ki = 0  # Keeping integral disabled for now
 kp = (MAX_SPEED / max_error) * 1  # Increase KP for better response
-kd = 0  # Reduce KD to prevent stopping at turns
+kd = 0.1  # Reduce KD to prevent stopping at turns
 
 while True:
     if cam.isRedLineDetected:
