@@ -2,10 +2,11 @@
 from camera.camera import Camera
 from threading import Thread
 from driver.drive import *
+from utils import scale_input
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
 # From voltage test
-MAX_SPEED = 0.6
+MAX_SPEED = 0.3
 
 # From straight line test
 error_threshold = 50
@@ -20,10 +21,9 @@ curr_error = 0
 prev_error = 0
 dt = 1/cam.fps
 
-kp = 0
+kp = 1
 ki = 0
 kd = 0
-
 
 while True:
     if cam.isRedLineDetected:
@@ -41,17 +41,17 @@ while True:
             output = p_out + i_out + d_out
 
             # Scale output to voltage
-
+            speedDelta = scale_input(output)
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
                 # If error is positive, turn right
-                speed_left = sigmoid(output)
-                speed_right = sigmoid(-output)
+                speed_left = MAX_SPEED + speedDelta
+                speed_right = MAX_SPEED - speedDelta
             else:
                 # If error is negative, turn left
-                speed_left = sigmoid(-output)
-                speed_right = sigmoid(output)
+                speed_left = MAX_SPEED - speedDelta
+                speed_right = MAX_SPEED + speedDelta
 
             drive(speedLeft=speed_left, speedRight=speed_right)
             
@@ -64,7 +64,3 @@ while True:
     else:
         # No red detected; stop the motors.
         stop()
-
-
-
-# def sigmoi
