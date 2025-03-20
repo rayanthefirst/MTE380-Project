@@ -12,49 +12,50 @@ cam = Camera(camera_id=0)
 cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
 
-integral = 0
-derivative = 0
-curr_error = 0
 prev_error = 0
-dt = 1 / cam.fps  # Time step based on camera frame rate
+dt = max(1 / cam.fps, 0.01)  # Prevent division by zero
 
 max_error = cam.width / 2
 
-ki = 0  # Keeping integral disabled for now
-kp = (MAX_SPEED / max_error) * 1.2  # Increase KP for better response
-kd = 0.02  # Reduce KD to prevent stopping at turns
+# **New PID Gains**
+kp = (MAX_SPEED / max_error) * 1.0  # Adjusted KP for smoother control
+kd = 0.015  # Lower KD to reduce sudden braking
+
+# **Speed Parameters**
+MIN_SPEED_RATIO = 0.6  # Ensures the slow wheel is never too slow (60% of base speed)
+MAX_SPEED_RATIO = 1.2  # Prevents over-speeding one wheel (120% of base speed)
 
 while True:
     if cam.isRedLineDetected:
-        prev_error = curr_error
         curr_error = cam.curr_error
 
         if abs(curr_error) > error_threshold:
             print("Error large; adjusting turn.")
 
-            # Compute PID terms
-            derivative = (curr_error - prev_error) / dt
+            # Compute PD terms
+            derivative = (curr_error - prev_error) / dt if dt > 0 else 0
 
             p_out = kp * curr_error
             d_out = kd * derivative
-            output = p_out + d_out 
+            output = p_out + d_out  # No integral term
 
-            # Scale output to voltage
-            speedDelta = min(MAX_SPEED / 2, abs(output))
+            # Scale output and limit how much one wheel can slow down
+            speedDelta = min(MAX_SPEED * 0.3, abs(output))  # Reduce aggressiveness
 
-            # Adjust PID Speed for right and left
-            if curr_error > 0:
-                # If error is positive, turn right
-                speed_left = (MAX_SPEED / 2) + speedDelta
-                speed_right = (MAX_SPEED / 2) - speedDelta
-            else:
-                # If error is negative, turn left
-                speed_left = (MAX_SPEED / 2) - speedDelta
-                speed_right = (MAX_SPEED / 2) + speedDelta
+            base_speed = MAX_SPEED * 0.8  # Lower base speed for better control
+            speed_factor = 1 if curr_error > 0 else -1
+
+            speed_left = base_speed * (1 + speed_factor * speedDelta)
+            speed_right = base_speed * (1 - speed_factor * speedDelta)
+
+            # **Ensure speed stays within limits**
+            speed_left = max(MIN_SPEED_RATIO * base_speed, min(MAX_SPEED_RATIO * base_speed, speed_left))
+            speed_right = max(MIN_SPEED_RATIO * base_speed, min(MAX_SPEED_RATIO * base_speed, speed_right))
 
             drive(speedLeft=speed_left, speedRight=speed_right)
         else:
-            derivative = 0
-            drive(speedLeft=(MAX_SPEED / 2), speedRight=(MAX_SPEED / 2), forward=True)
+            drive(speedLeft=(MAX_SPEED * 0.8), speedRight=(MAX_SPEED * 0.8), forward=True)
     else:
         stop()
+
+    prev_error = curr_error  # Update previous error for next loop
