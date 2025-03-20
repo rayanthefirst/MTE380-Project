@@ -2,6 +2,8 @@
 from gpiozero import Motor, RotaryEncoder
 from time import sleep, time
 import math
+import numpy as np
+
 # Setup motor drivers.
 left_motor = Motor(forward=14, backward=15)
 right_motor = Motor(forward=12, backward=13)
@@ -134,3 +136,8 @@ def test_spin():
         pass
 
     stop()
+
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))

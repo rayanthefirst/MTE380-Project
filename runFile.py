@@ -1,4 +1,4 @@
-# from driver.drive import *
+from driver.drive import sigmoid
 from camera.camera import Camera
 from threading import Thread
 import time
@@ -24,5 +24,6 @@ while True:
     print("i_out: ", i_out)
     print("d_out: ", d_out)
     print (output) 
+    print("sigmoid: ", sigmoid(output))
     time.sleep(1)
 
