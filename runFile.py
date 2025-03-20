@@ -20,7 +20,9 @@ while True:
     d_out = kd * cam.derivative
     output = p_out + i_out + d_out
 
-
+    print("p_out: ", p_out) 
+    print("i_out: ", i_out)
+    print("d_out: ", d_out)
     print (output) 
     time.sleep(1)
 
