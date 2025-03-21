@@ -14,9 +14,11 @@ right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 SPEED = 0.11
 TURN_SPEED = 0.11
 kp = 0.3
-kd = 0
+kd = 0.25
+ki = 0.1
 
 last_error = 0.0
+integral_error = 0.0
 last_time = time()
 
 
@@ -43,14 +45,20 @@ def stop():
     # print("Motors stopped.")
 
 def turn(turn_right=True, error=0):
-    global last_error, last_time
+    global last_error, last_time, integral_error
     current_time = time()
     dt = current_time - last_time
     if dt <= 0.000001:
         dt = 0.000001
 
+
+
+    ntegral_error += error * dt
+    # For a simple anti-windup, clamp the integral. Adjust clamp bounds as needed.
+    integral_error = max(min(integral_error, 100), -100)
+
     derivative = (error - last_error) / dt
-    control_output = (kp * error) + (kd * derivative)
+    control_output = (kp * error) + (kd * derivative) + (ki * integral_error)
 
     # Update "memory" for next iteration
     last_error = error
@@ -63,6 +71,7 @@ def turn(turn_right=True, error=0):
         left_motor_speed  = TURN_SPEED * (control_output / 160.0)
         right_motor_speed = TURN_SPEED
 
+    # Enforce some clamping if needed (to avoid negative or excessively large speeds)
     right_motor_speed = max(min(right_motor_speed, 1.0), 0.0)
     left_motor_speed  = max(min(left_motor_speed, 1.0), 0.0)
 
@@ -80,8 +89,8 @@ def turn(turn_right=True, error=0):
     #     right_motor_speed  = TURN_SPEED
         # print("motor speed, left turn :", left_motor_speed)
        
-    left_motor.forward(speed=left_motor_speed)
-    right_motor.backward(speed=right_motor_speed)
+    # left_motor.forward(speed=left_motor_speed)
+    # right_motor.backward(speed=right_motor_speed)
 
 
 """
