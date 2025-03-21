@@ -51,7 +51,8 @@ while True:
             output = p_out + i_out + d_out
             print("output" , output)
             # Scale output to voltage
-            speedDelta = min(MAX_SPEED / speedScalar, abs(output))
+            # speedDelta = min(MAX_SPEED / speedScalar, abs(output))
+            speedDelta = abs(output)
             print("speedDelts", speedDelta)
 
 
