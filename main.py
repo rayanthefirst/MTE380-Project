@@ -3,6 +3,7 @@ from camera.camera import Camera
 from threading import Thread
 from driver.drive import *
 from utils import scale_input
+import time
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
 # From voltage test
@@ -74,6 +75,17 @@ while True:
             drive(speedLeft=speed_left, speedRight=speed_right)
             
         else:
+            while not cam.isRedLineDetected:
+                if curr_error > 0:
+                    # If error is positive, turn right
+                    drive(speedLeft=(MAX_SPEED/(speedScalar*2)), speedRight=0, forward=True)
+
+                else:
+                    # If error is negative, turn left
+                    drive(speedLeft=0, speedRight=(MAX_SPEED/(speedScalar * 2)), forward=True)
+                # Reset PID values
+
+
             integral = 0
             derivative = 0
             # If error is small, drive forward.
