@@ -14,7 +14,7 @@ right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 SPEED = 0.10
 TURN_SPEED = 0.15
 kp = 0.3
-kd = 0.3
+kd = 0.25
 
 last_error = 0.0
 last_time = time()
