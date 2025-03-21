@@ -34,7 +34,7 @@ while True:
         curr_error = cam.curr_error
 
         if abs(curr_error) > error_threshold:
-            print("Error large; adjusting turn.")
+            # print("Error large; adjusting turn.")
             integral += curr_error * dt
             derivative = (curr_error - prev_error) / dt
 
