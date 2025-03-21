@@ -16,6 +16,10 @@ TURN_SPEED = 0.15
 kp = 0.35
 kd = 0.1
 
+last_error = 0.0
+last_time = time()
+
+
 
 def drive(forward=True):
     """
