@@ -44,17 +44,18 @@ while True:
             output = p_out + i_out + d_out
 
             # Scale output to voltage
-            speedDelta = min(MAX_SPEED / 2, abs(output))
+            speedScalar = 3
+            speedDelta = min(MAX_SPEED / speedScalar, abs(output))
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
                 # If error is positive, turn right
-                speed_left = (MAX_SPEED/2) + speedDelta
-                speed_right = (MAX_SPEED/2) - speedDelta
+                speed_left = (MAX_SPEED/speedScalar) + speedDelta
+                speed_right = (MAX_SPEED/speedScalar) - speedDelta
             else:
                 # If error is negative, turn left
-                speed_left = (MAX_SPEED/2) - speedDelta
-                speed_right = (MAX_SPEED/2) + speedDelta
+                speed_left = (MAX_SPEED/speedScalar) - speedDelta
+                speed_right = (MAX_SPEED/speedScalar) + speedDelta
             # print("Speed left: ", speed_left)
             # print("Speed right: ", speed_right)
 
