@@ -9,7 +9,7 @@ MAX_SPEED = 0.23
 error_threshold = 50
 
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
 cameraProcess.start()
 
 integral = 0
