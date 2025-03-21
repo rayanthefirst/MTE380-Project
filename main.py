@@ -21,8 +21,8 @@ dt = 1 / cam.fps  # Time step based on camera frame rate
 max_error = cam.width / 2
 
 ki = 0  # Keeping integral disabled for now
-kp = (MAX_SPEED / max_error) * 1  # Increase KP for better response
-kd = 0.15  # Reduce KD to prevent stopping at turns
+kp = (MAX_SPEED / max_error) * 0.7  # Increase KP for better response
+kd = 0.2  # Reduce KD to prevent stopping at turns
 
 while True:
     if cam.isRedLineDetected:
