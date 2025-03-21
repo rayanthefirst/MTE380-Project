@@ -45,7 +45,9 @@ while True:
             max_der = max(derivative, max_der)
 
             print("max der", max_der)
-
+            print("curr_error", curr_error)
+            print("prev_error", prev_error)
+            print("integral", integral)
             p_out = kp * curr_error
             print("p_out", p_out)
             i_out = ki * integral
@@ -75,7 +77,14 @@ while True:
             drive(speedLeft=speed_left, speedRight=speed_right)
             
         else:
-            while not cam.isRedLineDetected:
+            integral = 0
+            derivative = 0
+            # If error is small, drive forward.
+            drive(speedLeft=(MAX_SPEED/speedScalar), speedRight=(MAX_SPEED/speedScalar), forward=True)
+        
+    else:
+        # No red detected; stop the motors.
+        while not cam.isRedLineDetected:
                 if curr_error > 0:
                     # If error is positive, turn right
                     drive(speedLeft=(MAX_SPEED/(speedScalar*2)), speedRight=0, forward=True)
@@ -84,14 +93,5 @@ while True:
                     # If error is negative, turn left
                     drive(speedLeft=0, speedRight=(MAX_SPEED/(speedScalar * 2)), forward=True)
                 time.sleep(0.1)
-
-
-            integral = 0
-            derivative = 0
-            # If error is small, drive forward.
-            drive(speedLeft=(MAX_SPEED/speedScalar), speedRight=(MAX_SPEED/speedScalar), forward=True)
-        
-    else:
-        # No red detected; stop the motors.
 
         stop()
