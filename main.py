@@ -7,6 +7,7 @@ from utils import scale_input
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
 # From voltage test
 MAX_SPEED = 0.2
+speedScalar = 3
 
 # From straight line test
 error_threshold = 50
@@ -44,7 +45,6 @@ while True:
             output = p_out + i_out + d_out
 
             # Scale output to voltage
-            speedScalar = 3
             speedDelta = min(MAX_SPEED / speedScalar, abs(output))
 
             # Adjust PID Speed for right and left
@@ -65,8 +65,7 @@ while True:
             integral = 0
             derivative = 0
             # If error is small, drive forward.
-            drive(speedLeft=(MAX_SPEED/2), speedRight=(MAX_SPEED/2), forward=True)
-            # print('speed left: ', (MAX_SPEED/2))    
+            drive(speedLeft=(MAX_SPEED/speedScalar), speedRight=(MAX_SPEED/speedScalar), forward=True)
         
     else:
         # No red detected; stop the motors.
