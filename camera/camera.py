@@ -130,7 +130,6 @@ class Camera:
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
 
-            print("time", times)
 
         self.cap.release()
         cv.destroyAllWindows()
