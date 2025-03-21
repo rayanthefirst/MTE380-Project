@@ -46,8 +46,11 @@ while True:
             print("max der", max_der)
 
             p_out = kp * curr_error
+            print("p_out", p_out)
             i_out = ki * integral
+            print("i_out", i_out)
             d_out = kd * derivative
+            print("d_out", d_out)
             output = p_out + i_out + d_out
             print("output" , output)
             # Scale output to voltage
