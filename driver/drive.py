@@ -11,8 +11,8 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.15
-TURN_SPEED = 0.11
+SPEED = 0.13
+TURN_SPEED = 0.09
 K_differential = 0.1
 
 def drive(forward=True):
