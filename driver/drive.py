@@ -12,7 +12,7 @@ left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
 SPEED = 0.1
-TURN_SPEED = 0.1
+TURN_SPEED = 0.5
 K_differential = 0.01
 
 def drive(forward=True):
