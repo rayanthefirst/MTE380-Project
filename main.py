@@ -94,4 +94,6 @@ while True:
                     drive(speedLeft=0, speedRight=(MAX_SPEED/(speedScalar * 2)), forward=True)
                 time.sleep(0.1)
 
+        continue
+
         stop()
