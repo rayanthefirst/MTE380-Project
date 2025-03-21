@@ -84,16 +84,4 @@ while True:
         
     else:
         # No red detected; stop the motors.
-        while not cam.isRedLineDetected:
-                if curr_error > 0:
-                    # If error is positive, turn right
-                    drive(speedLeft=(MAX_SPEED/(speedScalar*2)), speedRight=0, forward=True)
-
-                else:
-                    # If error is negative, turn left
-                    drive(speedLeft=0, speedRight=(MAX_SPEED/(speedScalar * 2)), forward=True)
-                time.sleep(0.1)
-
-        continue
-
         stop()
