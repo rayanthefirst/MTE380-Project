@@ -7,7 +7,7 @@ from utils import scale_input
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
 # From voltage test
 MAX_SPEED = 0.2
-speedScalar = 3
+speedScalar = 2
 
 # From straight line test
 error_threshold = 50
@@ -29,7 +29,7 @@ kp = (MAX_SPEED / max_error)
 ki = 0
 kd = float(input("Enter kp value: "))
 
-der = []
+der_max = 0
 
 while True:
     if cam.isRedLineDetected:
@@ -40,9 +40,9 @@ while True:
             # print("Error large; adjusting turn.")
             integral += curr_error * dt
             derivative = (curr_error - prev_error) / dt
-            der.append(derivative)
+            max_der = max(derivative, max_der)
 
-            print(der)
+            print("max der", max_der)
 
             p_out = kp * curr_error
             i_out = ki * integral
