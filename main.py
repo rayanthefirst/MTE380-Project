@@ -29,6 +29,8 @@ kp = (MAX_SPEED / max_error)
 ki = 0
 kd = float(input("Enter kp value: "))
 
+der = []
+
 while True:
     if cam.isRedLineDetected:
         prev_error = curr_error
@@ -38,6 +40,9 @@ while True:
             # print("Error large; adjusting turn.")
             integral += curr_error * dt
             derivative = (curr_error - prev_error) / dt
+            der.append(derivative)
+
+            print(der)
 
             p_out = kp * curr_error
             i_out = ki * integral
@@ -69,4 +74,5 @@ while True:
         
     else:
         # No red detected; stop the motors.
+
         stop()
