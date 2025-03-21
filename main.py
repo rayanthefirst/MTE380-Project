@@ -3,7 +3,7 @@ from threading import Thread
 from driver.drive import *
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
-MAX_SPEED = 0.185
+MAX_SPEED = 0.250
 
 # From straight line test
 error_threshold = 50
@@ -40,17 +40,18 @@ while True:
             output = p_out + d_out 
 
             # Scale output to voltage
-            speedDelta = min(MAX_SPEED / 4, abs(output))
+            speedScalar = 3
+            speedDelta = min(MAX_SPEED / speedScalar, abs(output))
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
                 # If error is positive, turn right
-                speed_left = (MAX_SPEED / 4) + speedDelta
-                speed_right = (MAX_SPEED / 4) - speedDelta
+                speed_left = (MAX_SPEED / speedScalar) + speedDelta
+                speed_right = (MAX_SPEED / speedScalar) - speedDelta
             else:
                 # If error is negative, turn left
-                speed_left = (MAX_SPEED / 4) - speedDelta
-                speed_right = (MAX_SPEED / 4) + speedDelta
+                speed_left = (MAX_SPEED / speedScalar) - speedDelta
+                speed_right = (MAX_SPEED / speedScalar) + speedDelta
 
             drive(speedLeft=speed_left, speedRight=speed_right)
         else:
