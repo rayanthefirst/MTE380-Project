@@ -23,12 +23,12 @@ prev_error = 0
 dt = 1/cam.fps
 
 max_error = cam.width/2
-max_derivative = 9420
+max_derivative = cam.width / dt
 # max_derivative = cam.width/dt
 
 kp = (MAX_SPEED / max_error) 
 ki = 0
-kd = (MAX_SPEED / 9420)
+kd = (MAX_SPEED / max_error)
 
 max_der = 0
 
@@ -49,9 +49,11 @@ while True:
             i_out = ki * integral
             d_out = kd * derivative
             output = p_out + i_out + d_out
-
+            print("output" , output)
             # Scale output to voltage
             speedDelta = min(MAX_SPEED / speedScalar, abs(output))
+            print("speedDelts", speedDelta)
+
 
             # Adjust PID Speed for right and left
             if curr_error > 0:
