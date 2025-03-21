@@ -31,6 +31,11 @@ def stop():
     left_motor.stop()
     right_motor.stop()
 
+
+# def find_line(time, highSpeed, lowSpeed):
+#     drive(highSpeed, lowSpeed)
+#     time.sleep(time)
+
 """
 Test 1
 63 cm 
