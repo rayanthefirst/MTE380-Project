@@ -20,15 +20,15 @@ integral = 0
 derivative = 0
 curr_error = 0
 prev_error = 0
-# dt = 1/cam.fps
-dt = 0.32
+dt = 1/cam.fps
+# dt = 0.32
 max_error = cam.width/2
 max_derivative = cam.width / dt
 # max_derivative = cam.width/dt
 
 kp = ((MAX_SPEED / speedScalar) / max_error) 
 ki = 0
-kd = ((MAX_SPEED / speedScalar)  / max_error)
+kd = ((MAX_SPEED / speedScalar)  / max_derivative)
 
 max_der = 0
 
