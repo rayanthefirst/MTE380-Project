@@ -13,7 +13,9 @@ right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
 SPEED = 0.10
 TURN_SPEED = 0.15
-K_differential = 0.35
+kp = 0.35
+kd = 0.1
+
 
 def drive(forward=True):
     """
@@ -37,14 +39,41 @@ def stop():
     # print("Motors stopped.")
 
 def turn(turn_right=True, error=0):
-    if turn_right:
-        right_motor_speed = TURN_SPEED * ((K_differential * error) / 160)
-        left_motor_speed  = TURN_SPEED
-        # print("motor speed, right turn :", right_motor_speed)
+    global last_error, last_time
+    current_time = time()
+    dt = current_time - last_time
+    if dt <= 0.000001:
+        dt = 0.000001
 
+    derivative = (error - last_error) / dt
+    control_output = (kp * error) + (kd * derivative)
+
+    # Update "memory" for next iteration
+    last_error = error
+    last_time = current_time
+
+    if turn_right:
+        right_motor_speed = TURN_SPEED * (control_output / 160.0)
+        left_motor_speed  = TURN_SPEED
     else:
-        left_motor_speed = TURN_SPEED * ((K_differential * error) / 160)
-        right_motor_speed  = TURN_SPEED
+        left_motor_speed  = TURN_SPEED * (control_output / 160.0)
+        right_motor_speed = TURN_SPEED
+
+    right_motor_speed = max(min(right_motor_speed, 1.0), 0.0)
+    left_motor_speed  = max(min(left_motor_speed, 1.0), 0.0)
+
+    left_motor.forward(speed=left_motor_speed)
+    right_motor.backward(speed=right_motor_speed)
+
+
+    # if turn_right:
+    #     right_motor_speed = TURN_SPEED * ((kp * error) / 160)
+    #     left_motor_speed  = TURN_SPEED
+    #     # print("motor speed, right turn :", right_motor_speed)
+
+    # else:
+    #     left_motor_speed = TURN_SPEED * ((kp * error) / 160)
+    #     right_motor_speed  = TURN_SPEED
         # print("motor speed, left turn :", left_motor_speed)
        
     left_motor.forward(speed=left_motor_speed)

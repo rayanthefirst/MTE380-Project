@@ -9,6 +9,7 @@ cameraProcess.start()
 
 error_threshold = 50
 
+
 while True:
     if cam.isRedLineDetected:
         if abs(cam.curr_error) < error_threshold:
