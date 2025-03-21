@@ -4,10 +4,10 @@ from threading import Thread
 from driver.drive import *
 
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
 cameraProcess.start()
 
-error_threshold = 50
+error_threshold = 70
 
 while True:
     if cam.isRedLineDetected:
@@ -15,7 +15,7 @@ while True:
             # If error is small, drive forward.
             drive(forward=True)
         else:
-            print("Error large; adjusting turn.")
+            # print("Error large; adjusting turn.")
             # Calculate turn angle proportional to the error (limit to 30° maximum).
             if cam.curr_error > 0:
                 # If error is positive, the red line is to the right.
