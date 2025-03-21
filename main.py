@@ -29,7 +29,7 @@ kp = (MAX_SPEED / max_error)
 ki = 0
 kd = float(input("Enter kp value: "))
 
-der_max = 0
+max_der = 0
 
 while True:
     if cam.isRedLineDetected:
