@@ -12,7 +12,7 @@ MAX_SPEED = 0.2
 error_threshold = 50
 
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
 cameraProcess.start()
 
 integral = 0
@@ -24,7 +24,7 @@ dt = 1/cam.fps
 max_error = cam.width/2
 # max_derivative = cam.width/dt
 
-kp = (MAX_SPEED / (max_error )) 
+kp = (MAX_SPEED / max_error) 
 ki = 0
 kd = float(input("Enter kp value: "))
 
