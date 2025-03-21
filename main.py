@@ -74,13 +74,13 @@ while True:
             # print("Speed left: ", speed_left)
             # print("Speed right: ", speed_right)
 
-            drive(speedLeft=speed_left, speedRight=speed_right)
+            drive(speedLeft=speed_left, speedRight=speed_right, forward=False)
             
         else:
             integral = 0
             derivative = 0
             # If error is small, drive forward.
-            drive(speedLeft=(MAX_SPEED/speedScalar), speedRight=(MAX_SPEED/speedScalar), forward=True)
+            drive(speedLeft=(MAX_SPEED/speedScalar), speedRight=(MAX_SPEED/speedScalar), forward=False)
         
     else:
         # No red detected; stop the motors.
