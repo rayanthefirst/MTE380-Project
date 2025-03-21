@@ -4,10 +4,10 @@ from threading import Thread
 from driver.drive import *
 
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
 cameraProcess.start()
 
-error_threshold = 70
+error_threshold = 50
 
 while True:
     if cam.isRedLineDetected:
