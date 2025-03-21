@@ -6,7 +6,7 @@ from utils import scale_input
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
 # From voltage test
-MAX_SPEED = 0.2
+MAX_SPEED = 0.1
 speedScalar = 2
 
 # From straight line test
