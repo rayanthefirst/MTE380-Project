@@ -3,7 +3,7 @@ from threading import Thread
 from driver.drive import *
 
 # SPEED IS RESTRICTED BETWEEN 0 AND 1
-MAX_SPEED = 0.250
+MAX_SPEED = 0.20
 
 # From straight line test
 error_threshold = 50
@@ -22,7 +22,7 @@ max_error = cam.width / 2
 
 ki = 0  # Keeping integral disabled for now
 kp = (MAX_SPEED / max_error) * 1  # Increase KP for better response
-kd = 0.05  # Reduce KD to prevent stopping at turns
+kd = 0.1  # Reduce KD to prevent stopping at turns
 
 while True:
     if cam.isRedLineDetected:
@@ -40,7 +40,7 @@ while True:
             output = p_out + d_out 
 
             # Scale output to voltage
-            speedScalar = 3
+            speedScalar = 3.5
             speedDelta = min(MAX_SPEED / speedScalar, abs(output))
 
             # Adjust PID Speed for right and left
