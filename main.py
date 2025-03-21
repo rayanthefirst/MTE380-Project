@@ -4,7 +4,7 @@ from threading import Thread
 from driver.drive import *
 
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
+cameraProcess = Thread(target=cam.start_detection, kwargs={"display": True})
 cameraProcess.start()
 
 error_threshold = 50
