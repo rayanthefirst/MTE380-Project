@@ -7,7 +7,7 @@ class Camera:
         print("Camera initialized")
         self.cap = cv.VideoCapture(camera_id)
         
-        self.fps = 10
+        self.fps = 30
         self.width = 320
         # Set resolution
         self.cap.set(cv.CAP_PROP_FRAME_WIDTH, self.width)
