@@ -74,7 +74,7 @@ while True:
             # print("Speed left: ", speed_left)
             # print("Speed right: ", speed_right)
 
-            drive(speedLeft=speed_left, speedRight=speed_right, forward=False)
+            drive(speedLeft=speed_right, speedRight=speed_left, forward=False)
             
         else:
             integral = 0
