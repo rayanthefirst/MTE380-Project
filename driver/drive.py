@@ -53,7 +53,7 @@ def turn(turn_right=True, error=0):
 
 
 
-    ntegral_error += error * dt
+    integral_error += error * dt
     # For a simple anti-windup, clamp the integral. Adjust clamp bounds as needed.
     integral_error = max(min(integral_error, 100), -100)
 
