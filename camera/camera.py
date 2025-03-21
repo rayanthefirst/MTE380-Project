@@ -40,9 +40,7 @@ class Camera:
         #     print(f"Reading from file: {video_filename}")
         # else:
         #     print("Using live feed")
-        times = []
         while True:
-            times.append(time.time())
             ret, frame = self.cap.read()
             if not ret:
                 print("Failed to capture frame")

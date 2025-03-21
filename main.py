@@ -20,8 +20,8 @@ integral = 0
 derivative = 0
 curr_error = 0
 prev_error = 0
-dt = 1/cam.fps
-
+# dt = 1/cam.fps
+dt = 0.32
 max_error = cam.width/2
 max_derivative = cam.width / dt
 # max_derivative = cam.width/dt
