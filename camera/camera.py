@@ -1,8 +1,6 @@
 import cv2 as cv
 import numpy as np
-import math
 import time
-import os
 
 class Camera:
     def __init__(self, camera_id=0):
@@ -42,8 +40,9 @@ class Camera:
         #     print(f"Reading from file: {video_filename}")
         # else:
         #     print("Using live feed")
-            
+        times = []
         while True:
+            times.append(time.time())
             ret, frame = self.cap.read()
             if not ret:
                 print("Failed to capture frame")
@@ -132,6 +131,8 @@ class Camera:
 
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
+
+            print("time", times)
 
         self.cap.release()
         cv.destroyAllWindows()
