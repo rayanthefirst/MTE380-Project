@@ -83,7 +83,7 @@ while True:
                 else:
                     # If error is negative, turn left
                     drive(speedLeft=0, speedRight=(MAX_SPEED/(speedScalar * 2)), forward=True)
-                # Reset PID values
+                time.sleep(0.1)
 
 
             integral = 0
