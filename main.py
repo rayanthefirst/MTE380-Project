@@ -26,9 +26,9 @@ max_error = cam.width/2
 max_derivative = cam.width / dt
 # max_derivative = cam.width/dt
 
-kp = (MAX_SPEED / max_error) 
+kp = ((MAX_SPEED / speedScalar) / max_error) 
 ki = 0
-kd = (MAX_SPEED / max_error)
+kd = ((MAX_SPEED / speedScalar)  / max_error)
 
 max_der = 0
 
