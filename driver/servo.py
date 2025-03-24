@@ -1,18 +1,18 @@
 from gpiozero import Servo
 from time import sleep
 
-# Adjust pins to the actual GPIOs used for the servos
-left_servo = Servo(22)
-right_servo = Servo(23)
+
+left_servo = Servo(26)
+right_servo = Servo(20)
 
 def open_arms():
     print("Opening arms...")
-    left_servo.min()   # Fully open left arm
-    right_servo.max()  # Fully open right arm
+    left_servo.min()  
+    right_servo.max()  
     sleep(1)
 
 def close_arms():
     print("Closing arms...")
-    left_servo.max()   # Pull left arm in
-    right_servo.min()  # Pull right arm in
+    left_servo.max()   
+    right_servo.min()  
     sleep(1)
