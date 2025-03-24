@@ -16,7 +16,7 @@ try:
     while True:
         left_pos = left_servo.value  # range: -1 (min) to 1 (max)
         right_pos = right_servo.value
-        print(f"Left Servo: {left_servo} | Right Servo: {right_servo}")
+        print(f"Left Servo: {left_pos} | Right Servo: {left_pos}")
         time.sleep(0.5)
 
 except KeyboardInterrupt:
