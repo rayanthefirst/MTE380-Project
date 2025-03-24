@@ -23,7 +23,7 @@ lego_grabbed = False
 
 while True:
     # Red line following logic
-    if not lego_grabbed and cam.isRedLineDetected:
+    if cam.isRedLineDetected:
         if abs(cam.curr_error) < error_threshold:
             print("Following red line: driving forward.")
             drive(forward=True)
@@ -55,7 +55,7 @@ while True:
         # open_arms()
         # sleep(1)
         # close_arms()
-        lego_grabbed = True
+        # lego_grabbed = True
         print("LEGO picked up.")
 
     # Manual exit option
