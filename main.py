@@ -1,34 +1,69 @@
-
 from camera.camera import Camera
-from threading import Thread
-from driver.drive import *
+from driver.drive import drive, stop, turn
+from driver.servo import open_arms, close_arms
 
+import cv2
+import numpy as np
+import threading
+from time import sleep
+
+# Start red line detection
 cam = Camera(camera_id=0)
-cameraProcess = Thread(target=cam.start_detection, kwargs={"display": False})
-cameraProcess.start()
+cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": False})
+cameraThread.start()
 
+# Simplified color thresholds (HSV)
+blue_lower = np.array([100, 100, 50])
+blue_upper = np.array([130, 255, 255])
+
+white_lower = np.array([0, 0, 200])
+white_upper = np.array([180, 30, 255])
+
+video = cv2.VideoCapture(0)
 error_threshold = 25
-
+lego_grabbed = False
 
 while True:
-    if cam.isRedLineDetected:
+    # Red line following logic
+    if not lego_grabbed and cam.isRedLineDetected:
         if abs(cam.curr_error) < error_threshold:
-            # If error is small, drive forward.
-            print("Error small; driving forward.")
+            print("Following red line: driving forward.")
             drive(forward=True)
         else:
-            # print("Error large; adjusting turn.")
-            # Calculate turn angle proportional to the error (limit to 30° maximum).
             if cam.curr_error > 0:
-                # If error is positive, the red line is to the right.
-                print("Red line detected to the right.")
+                print("Red line to the right. Turning right.")
                 turn(turn_right=True, error=abs(cam.curr_error))
             else:
-                # If error is negative, the red line is to the left.
-                print("Red line detected to the left.")
+                print("Red line to the left. Turning left.")
                 turn(turn_right=False, error=abs(cam.curr_error))
-    else:
-        # No red detected; stop the motors.
+    elif not lego_grabbed:
+        print("Red line lost. Stopping.")
         stop()
 
+    # LEGO detection via color presence (blue + white in same frame)
+    ret, frame = video.read()
+    if not ret:
+        continue
 
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
+    white_mask = cv2.inRange(hsv, white_lower, white_upper)
+
+    has_blue = cv2.countNonZero(blue_mask) > 20
+    has_white = cv2.countNonZero(white_mask) > 20
+
+    if has_blue and has_white and not lego_grabbed:
+        print("Blue and white detected in frame — initiating LEGO pickup.")
+        stop()
+        open_arms()
+        sleep(1)
+        close_arms()
+        lego_grabbed = True
+        print("LEGO picked up.")
+
+    # Manual exit option
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+video.release()
+cv2.destroyAllWindows()
