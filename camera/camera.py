@@ -65,8 +65,7 @@ class Camera:
             blue_mask = cv.inRange(hsv, self.blue_lower, self.blue_upper)
             self.sees_blue = cv.countNonZero(blue_mask) > 20  # Adjust threshold if needed
 
-            if display:
-                cv.imshow("Blue Mask", blue_mask)
+            
 
 
             # Step 1: Create a mask for red pixels
@@ -80,6 +79,8 @@ class Camera:
             # mask = cv.dilate(mask, kernel, iterations=10)
             if display:
                 cv.imshow("mask2", mask)
+            if display:
+                cv.imshow("Blue Mask", blue_mask)
 
 
             # Step 3: Find contours in the cleaned-up mask
