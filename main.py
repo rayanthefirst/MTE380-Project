@@ -47,13 +47,14 @@ while True:
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
     has_blue = cv2.countNonZero(blue_mask) > 20
+    cv2.imshow("Blue Mask", blue_mask)
 
-    if has_blue and not lego_grabbed:
-        print("Blue and white detected in frame — initiating LEGO pickup.")
+    if has_blue:
+        print("Seeing blue")
         stop()
-        open_arms()
-        sleep(1)
-        close_arms()
+        # open_arms()
+        # sleep(1)
+        # close_arms()
         lego_grabbed = True
         print("LEGO picked up.")
 
