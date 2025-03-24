@@ -31,7 +31,7 @@ class Camera:
         self.latest_frame = None
         self.sees_blue = False  # <- NEW FLAG
 
-    def start_detection(self, display=True, video_filename=None):
+    def start_detection(self, display=False, video_filename=None):
         while True:
             ret, frame = self.cap.read()
             if not ret:
@@ -111,3 +111,8 @@ class Camera:
 
         self.cap.release()
         cv.destroyAllWindows()
+
+if __name__ == "__main__":
+    cam = Camera(camera_id=0)
+    cam.start_detection(display=True)
+
