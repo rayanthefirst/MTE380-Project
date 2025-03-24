@@ -1,7 +1,5 @@
 from camera.camera import Camera
 from driver.drive import drive, stop, turn
-# from driver.servo import open_arms, close_arms 
-
 import cv2
 import numpy as np
 import threading
