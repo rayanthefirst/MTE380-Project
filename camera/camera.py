@@ -33,7 +33,7 @@ class Camera:
         self.dt = 1/self.fps
 
 
-    def start_detection(self, display=False, video_filename=None):
+    def start_detection(self, display=True, video_filename=None):
         """
         Continuously capture frames and detect + track the red line contours.
         """
