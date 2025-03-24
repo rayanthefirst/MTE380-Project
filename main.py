@@ -32,7 +32,7 @@ while True:
             else:
                 print("Red line to the left. Turning left.")
                 turn(turn_right=False, error=abs(cam.curr_error))
-    elif not lego_grabbed:
+    else:
         print("Red line lost. Stopping.")
         stop()
 
@@ -45,14 +45,12 @@ while True:
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
     has_blue = cv2.countNonZero(blue_mask) > 20
-    cv2.imshow("Blue Mask", blue_mask)
-
-    if cam.sees_blue and not lego_grabbed:
+    if cam.sees_blue:
         print("Blue detected!")
-        stop()
-        open_arms()
-        sleep(1)
-        close_arms()
+        # stop()
+        # open_arms()
+        # sleep(1)
+        # close_arms()
         lego_grabbed = True
 
 
