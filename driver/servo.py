@@ -2,8 +2,8 @@ from gpiozero import Servo
 from time import sleep
 
 
-left_servo = Servo(26)
-right_servo = Servo(20)
+left_servo = Servo(26, minimize_pulse_width=0.0005, maximize_pulse_width=0.0025)
+right_servo = Servo(20, minimize_pulse_width=0.0005, maximize_pulse_width=0.0025)
 
 def open_arms():
     print("Opening arms...")
