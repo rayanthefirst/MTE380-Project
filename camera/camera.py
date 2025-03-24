@@ -56,6 +56,9 @@ class Camera:
                 print("Failed to capture frame")
                 break
 
+            self.latest_frame = frame.copy()  # <--- ADD THIS LINE
+
+
             # Optionally resize to a square if you want consistency
             # frame = cv.resize(frame, (480, 480))
 
