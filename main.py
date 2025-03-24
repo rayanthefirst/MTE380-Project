@@ -16,8 +16,6 @@ cameraThread.start()
 blue_lower = np.array([100, 100, 50])
 blue_upper = np.array([130, 255, 255])
 
-white_lower = np.array([0, 0, 200])
-white_upper = np.array([180, 30, 255])
 
 video = cv2.VideoCapture(0)
 error_threshold = 25
@@ -47,12 +45,10 @@ while True:
 
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
-    white_mask = cv2.inRange(hsv, white_lower, white_upper)
 
     has_blue = cv2.countNonZero(blue_mask) > 20
-    has_white = cv2.countNonZero(white_mask) > 20
 
-    if has_blue and has_white and not lego_grabbed:
+    if has_blue and not lego_grabbed:
         print("Blue and white detected in frame — initiating LEGO pickup.")
         stop()
         open_arms()
