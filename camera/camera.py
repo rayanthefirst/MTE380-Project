@@ -20,6 +20,11 @@ class Camera:
         self.red_upper = np.array([10, 255, 255])
         self.red_lower_2 = np.array([160, 100, 100])
         self.red_upper_2 = np.array([180, 255, 255])
+        # Blue detection range
+        self.blue_lower = np.array([100, 100, 50])
+        self.blue_upper = np.array([130, 255, 255])
+        self.sees_blue = False
+
         # self.red_lower = np.array([0, 0, 200])
         # self.red_upper = np.array([180, 55, 255])
         # self.red_lower_2 = np.array([0, 0, 200])
@@ -56,6 +61,13 @@ class Camera:
 
             # Convert BGR -> HSV
             hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+            # --- BLUE DETECTION ---
+            blue_mask = cv.inRange(hsv, self.blue_lower, self.blue_upper)
+            self.sees_blue = cv.countNonZero(blue_mask) > 20  # Adjust threshold if needed
+
+            if display:
+                cv.imshow("Blue Mask", blue_mask)
+
 
             # Step 1: Create a mask for red pixels
             mask1 = cv.inRange(hsv, self.red_lower, self.red_upper)
