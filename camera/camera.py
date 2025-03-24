@@ -183,3 +183,8 @@ class Camera:
         finally:
             writer.release()
             cv.destroyWindow("Recording")
+
+if __name__ == "__main__":
+    cam = Camera(camera_id=0)
+    cam.start_detection(display=True)
+
