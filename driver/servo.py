@@ -7,12 +7,12 @@ right_servo = Servo(20)
 
 def open_arms():
     print("Opening arms...")
-    left_servo.min()
-    right_servo.max()
+    left_servo.value = -1.0
+    right_servo.value = 1.0
     sleep(1)
 
 def close_arms():
     print("Closing arms...")
-    left_servo.max()
-    right_servo.min()
+    left_servo.value = 1.0
+    right_servo.value = -1.0
     sleep(1)
