@@ -1,6 +1,5 @@
 from camera.camera import Camera
 from driver.drive import drive, stop, turn
-from driver.servo import open_arms, close_arms
 
 import cv2
 import numpy as np
@@ -12,17 +11,15 @@ cam = Camera(camera_id=0)
 cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": False})
 cameraThread.start()
 
-# Simplified color thresholds (HSV)
+# HSV threshold for blue
 blue_lower = np.array([100, 100, 50])
 blue_upper = np.array([130, 255, 255])
 
-
-video = cv2.VideoCapture(0)
 error_threshold = 25
 lego_grabbed = False
 
 while True:
-    # Red line following logic
+    # Red line following
     if cam.isRedLineDetected:
         if abs(cam.curr_error) < error_threshold:
             print("Following red line: driving forward.")
@@ -38,11 +35,11 @@ while True:
         print("Red line lost. Stopping.")
         stop()
 
-    # LEGO detection via color presence (blue + white in same frame)
-    ret, frame = video.read()
-    if not ret:
+    # Use shared frame for LEGO detection
+    if cam.latest_frame is None:
         continue
 
+    frame = cam.latest_frame.copy()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
@@ -52,17 +49,14 @@ while True:
     if has_blue and not lego_grabbed:
         print("Seeing blue")
         stop()
-        from driver.servo import open_arms, close_arms  # import only when needed
+        from driver.servo import open_arms, close_arms
         open_arms()
         sleep(1)
         close_arms()
         lego_grabbed = True
         print("LEGO picked up.")
-    
 
-    # Manual exit option
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-video.release()
 cv2.destroyAllWindows()
