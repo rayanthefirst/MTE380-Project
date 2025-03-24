@@ -56,7 +56,11 @@ while True:
         # sleep(1)
         # close_arms()
         # lego_grabbed = True
-        print("LEGO picked up.")
+        # print("LEGO picked up.")
+
+    servo1_position = get_servo1_position()
+    print(f"Servo1 position: {servo1_position}")
+
 
     # Manual exit option
     if cv2.waitKey(1) & 0xFF == ord('q'):
