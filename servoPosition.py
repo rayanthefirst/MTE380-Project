@@ -7,6 +7,8 @@ import time
 left_servo = Servo(26)
 right_servo = Servo(20)
 
+left_servo.value = None  # no command yet
+right_servo.value = None
 
 print("Monitoring servo positions... (press Ctrl+C or q in window to quit)")
 
