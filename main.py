@@ -1,5 +1,6 @@
 from camera.camera import Camera
 from driver.drive import drive, stop, turn
+from driver.servo import open_arms, close_arms 
 
 import cv2
 import numpy as np
@@ -46,15 +47,14 @@ while True:
     has_blue = cv2.countNonZero(blue_mask) > 20
     cv2.imshow("Blue Mask", blue_mask)
 
-    if has_blue and not lego_grabbed:
-        print("Seeing blue")
+    if cam.sees_blue and not lego_grabbed:
+        print("Blue detected!")
         stop()
-        from driver.servo import open_arms, close_arms
         open_arms()
         sleep(1)
         close_arms()
         lego_grabbed = True
-        print("LEGO picked up.")
+
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
