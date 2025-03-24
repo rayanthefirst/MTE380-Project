@@ -47,10 +47,10 @@ while True:
     has_blue = cv2.countNonZero(blue_mask) > 20
     if cam.sees_blue:
         print("Blue detected!")
-        # stop()
-        # open_arms()
-        # sleep(1)
-        # close_arms()
+        stop()
+        open_arms()
+        sleep(1)
+        close_arms()
         lego_grabbed = True
 
 
