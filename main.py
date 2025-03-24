@@ -56,10 +56,7 @@ while True:
         # sleep(1)
         # close_arms()
         # lego_grabbed = True
-        # print("LEGO picked up.")
-
-    servo1_position = get_servo1_position()
-    print(f"Servo1 position: {servo1_position}")
+        print("LEGO picked up.")
 
 
     # Manual exit option
