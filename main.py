@@ -49,15 +49,16 @@ while True:
     has_blue = cv2.countNonZero(blue_mask) > 20
     cv2.imshow("Blue Mask", blue_mask)
 
-    if has_blue:
+    if has_blue and not lego_grabbed:
         print("Seeing blue")
         stop()
-        # open_arms()
-        # sleep(1)
-        # close_arms()
-        # lego_grabbed = True
+        from driver.servo import open_arms, close_arms  # import only when needed
+        open_arms()
+        sleep(1)
+        close_arms()
+        lego_grabbed = True
         print("LEGO picked up.")
-
+    
 
     # Manual exit option
     if cv2.waitKey(1) & 0xFF == ord('q'):
