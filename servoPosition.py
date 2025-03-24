@@ -4,8 +4,8 @@ from signal import pause
 import time
 
 
-left_servo = Servo(26, min_pulse_width=0.0005, max_pulse_width=0.0025)
-right_servo = Servo(20, min_pulse_width=0.0005, max_pulse_width=0.0025)
+left_servo = Servo(26)
+right_servo = Servo(20)
 
 
 print("Monitoring servo positions... (press Ctrl+C or q in window to quit)")
