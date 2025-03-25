@@ -94,11 +94,9 @@ while True:
             drive(forward=True)
             sleep(1.5)  # Increased from 1 to 2 seconds
             stop()
-            sleep(0.5)
 
             print("Dropping LEGO...")
             open_arms()
-            sleep(0.5)
 
             print("Backing up...")
             drive(forward=False)
