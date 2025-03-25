@@ -62,12 +62,17 @@ while True:
         close_arms()
         lego_grabbed = True
 
+        # Force red line detection to false to ensure spin loop triggers
+        cam.isRedLineDetected = False
+
         print("Rotating until red line is found...")
         while not cam.isRedLineDetected:
-            drive(forward=True)  # clockwise spin
+            drive(forward=True)  # clockwise spin in place
             sleep(0.5)
+
         stop()
         print("Red line reacquired. Resuming line following.")
+
 
 
     else:
