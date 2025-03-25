@@ -22,6 +22,7 @@ class Camera:
 
         self.blue_lower = np.array([100, 100, 50])
         self.blue_upper = np.array([130, 255, 255])
+        
 
         # State variables
         self.sees_blue = False
