@@ -43,11 +43,10 @@ while True:
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
     has_blue = cv2.countNonZero(blue_mask) > 20
-    sleep(4)
     if has_blue and not lego_grabbed:
         print("Blue detected!")
-        sleep(1)
         stop()
+        sleep(4)
         from driver import servo  # Lazy import here
         print("Opening arms...")
         # servo.open_arms()
