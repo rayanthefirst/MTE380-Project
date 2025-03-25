@@ -21,7 +21,7 @@ target_mask = cv2.resize(target_mask, (100, 100))
 _, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
 
 error_threshold = 25
-lego_grabbed = False
+lego_grabbed = True
 dropoff_done = False
 
 while True:
@@ -72,7 +72,6 @@ while True:
 
         else:
             print(f"No shape match (score: {match_score:.2f})")
-        lego_grabbed = True
     elif lego_grabbed and not dropoff_done:
         # ----- GREEN drop-off logic -----
         green_mask = cv2.inRange(hsv, green_lower, green_upper)
