@@ -63,12 +63,13 @@ while True:
         close_arms()
         lego_grabbed = True
 
-        print("Rotating 180 degrees...")
-        # Turn left or right for a fixed amount of time to simulate 180-degree rotation
-        turn(turn_right=True, error=100)  # max turn power
-        sleep(1.5)  # adjust duration based on how fast your robot turns
+        print("Rotating until red line is found...")
+        while not cam.isRedLineDetected:
+            turn(turn_right=True, error=50)  # slow spin in place
+            sleep(0.05)
         stop()
-        print("Turn complete. Resuming red line following.")
+        print("Red line reacquired. Resuming line following.")
+
 
     else:
         print(f"No shape match (score: {match_score:.2f})")
