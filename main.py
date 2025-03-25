@@ -40,8 +40,8 @@ while True:
     else:
         print("Red line lost. Stopping.")
         stop()
-        sleep(2)
-        open_arms()
+        # sleep(2)
+        # open_arms()
 
     # Use shared frame for LEGO detection
     if cam.latest_frame is None or lego_grabbed:
