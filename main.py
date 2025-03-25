@@ -1,11 +1,13 @@
 from camera.camera import Camera
 from driver.drive import drive, stop, turn
+from driver.servo import open_arms, close_arms
+
 import cv2
 import numpy as np
 import threading
 from time import sleep
 
-# Start red line detection
+# Start red line detection in a separate thread
 cam = Camera(camera_id=0)
 cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": False})
 cameraThread.start()
@@ -14,11 +16,16 @@ cameraThread.start()
 blue_lower = np.array([100, 100, 50])
 blue_upper = np.array([130, 255, 255])
 
+# Load the target shape (your bullseye top arc image)
+target_mask = cv2.imread("blueTarget.png", cv2.IMREAD_GRAYSCALE)
+target_mask = cv2.resize(target_mask, (100, 100))
+_, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
+
 error_threshold = 25
 lego_grabbed = False
 
 while True:
-    # Red line following
+    # Red line following logic
     if cam.isRedLineDetected:
         if abs(cam.curr_error) < error_threshold:
             print("Following red line: driving forward.")
@@ -35,25 +42,32 @@ while True:
         stop()
 
     # Use shared frame for LEGO detection
-    if cam.latest_frame is None:
+    if cam.latest_frame is None or lego_grabbed:
         continue
 
     frame = cam.latest_frame.copy()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
-    has_blue = cv2.countNonZero(blue_mask) > 20
-    if has_blue and not lego_grabbed:
-        print("Blue detected!")
-        stop()
-        sleep(4)
-        from driver import servo  # Lazy import here
-        print("Opening arms...")
-        # servo.open_arms()
-        print("Closing arms...")
-        servo.close_arms()
-        lego_grabbed = True
+    # Resize to match the target mask size
+    resized_blue_mask = cv2.resize(blue_mask, (100, 100))
 
+    # Compare with target shape
+    match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
+
+    if match_score > 0.75:
+        sleep(1)
+        print(f"Blue shape match detected (score: {match_score:.2f})")
+        stop()
+        open_arms()
+        sleep(1)
+        close_arms()
+        lego_grabbed = True
+    else:
+        print(f"No shape match (score: {match_score:.2f})")
+
+    # Optional: show live mask window for debugging
+    cv2.imshow("Live Blue Mask", blue_mask)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
