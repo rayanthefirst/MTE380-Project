@@ -85,7 +85,7 @@ while True:
         resized_green = cv2.resize(green_mask, (100, 100))
         green_score = cv2.matchTemplate(resized_green, green_target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
 
-        if green_score > 0.05:
+        if green_score > 0.075:
             print(f"Green shape match detected (score: {green_score:.2f})")
             stop()
             sleep(0.5)
