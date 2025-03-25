@@ -66,7 +66,7 @@ while True:
         print("Rotating until red line is found...")
         while not cam.isRedLineDetected:
             drive(forward=True)  # clockwise spin
-            sleep(0.05)
+            sleep(0.5)
         stop()
         print("Red line reacquired. Resuming line following.")
 
