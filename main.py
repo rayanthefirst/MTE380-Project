@@ -1,5 +1,5 @@
 from camera.camera import Camera
-from driver.drive import drive, stop, turn
+from driver.drive import drive, stop, turn, left_motor, right_motor
 from driver.servo import open_arms, close_arms
 
 import cv2
@@ -65,19 +65,17 @@ while True:
         # Force red line detection to false to ensure spin loop triggers
         cam.isRedLineDetected = False
 
-        print("Rotating until red line is found...")
+        print("Rotating in place until red line is found...")
         while not cam.isRedLineDetected:
-            drive(forward=True)  # clockwise spin in place
-            sleep(0.5)
+            left_motor.forward(speed=0.2)
+            right_motor.forward(speed=0.1)
+            sleep(0.1)
 
         stop()
         print("Red line reacquired. Resuming line following.")
 
-
-
     else:
         print(f"No shape match (score: {match_score:.2f})")
-
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
