@@ -76,7 +76,7 @@ while True:
     elif lego_grabbed and not dropoff_done:
         # ----- GREEN drop-off logic -----
         green_mask = cv2.inRange(hsv, green_lower, green_upper)
-        has_green = cv2.countNonZero(green_mask) > 20
+        has_green = cv2.countNonZero(green_mask) > 0
 
         if has_green:
             print("Green detected! Executing drop-off sequence...")
