@@ -88,8 +88,8 @@ while True:
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
         # HSV threshold for green
-        green_lower = np.array([35, 40, 40])
-        green_upper = np.array([85, 255, 255])
+        green_lower = np.array([160, 50, 50])
+        green_upper = np.array([180, 80, 80])
         green_mask = cv2.inRange(hsv, green_lower, green_upper)
 
         # Check if a significant portion of the frame is green
