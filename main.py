@@ -49,8 +49,7 @@ while True:
         stop()
         from driver import servo  # Lazy import here
         print("Opening arms...")
-        servo.open_arms()
-        sleep(1)
+        # servo.open_arms()
         print("Closing arms...")
         servo.close_arms()
         lego_grabbed = True
