@@ -55,7 +55,7 @@ while True:
     # Compare with target shape
     match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
 
-    if match_score > 0.75:
+    if match_score > 0.01:
         print(f"Blue shape match detected (score: {match_score:.2f})")
         stop()
         open_arms()
