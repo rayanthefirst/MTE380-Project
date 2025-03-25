@@ -22,16 +22,19 @@ class Camera:
 
         self.blue_lower = np.array([100, 100, 50])
         self.blue_upper = np.array([130, 255, 255])
-        
+
+        self.green_lower = np.array([40, 50, 50])
+        self.green_upper = np.array([80, 255, 255])
 
         # State variables
         self.sees_blue = False
+        self.sees_green = False
         self.isRedLineDetected = False
         self.curr_error = 0
         self.prev_error = 0
         self.angle = 0
         self.dt = 1 / self.fps
-        self.latest_frame = None  # ✅ Added this to fix AttributeError
+        self.latest_frame = None
 
     def start_detection(self, display=True, video_filename=None):
         while True:
@@ -41,27 +44,22 @@ class Camera:
                 break
 
             self.latest_frame = frame.copy()
-
             hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
             # --- BLUE DETECTION ---
             blue_mask = cv.inRange(hsv, self.blue_lower, self.blue_upper)
-            self.sees_blue = cv.countNonZero(blue_mask) > 20  # Adjust if needed
+            self.sees_blue = cv.countNonZero(blue_mask) > 20
 
+            # --- GREEN DETECTION ---
+            green_mask = cv.inRange(hsv, self.green_lower, self.green_upper)
+            self.sees_green = cv.countNonZero(green_mask) > 20
 
             # --- RED LINE DETECTION ---
             mask1 = cv.inRange(hsv, self.red_lower, self.red_upper)
             mask2 = cv.inRange(hsv, self.red_lower_2, self.red_upper_2)
             red_mask = cv.bitwise_or(mask1, mask2)
 
-            if display:
-                cv.imshow("mask2", red_mask)
-            if display:
-                cv.imshow("Blue Mask", blue_mask)
-
-            contours, _ = cv.findContours(
-                red_mask.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE
-            )
+            contours, _ = cv.findContours(red_mask.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
             if contours:
                 self.isRedLineDetected = True
@@ -109,6 +107,8 @@ class Camera:
 
             if display:
                 cv.imshow("Red Line Contour Tracking", frame)
+                cv.imshow("Blue Mask", blue_mask)
+                cv.imshow("Green Mask", green_mask)
 
             if cv.waitKey(1) & 0xFF == ord('q'):
                 break
