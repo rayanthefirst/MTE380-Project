@@ -89,26 +89,27 @@ while True:
             print(f"Green shape match detected (score: {green_score:.2f})")
             stop()
             sleep(0.5)
+
+            print("Driving forward to drop location...")
             drive(forward=True)
-            sleep(1)
+            sleep(2)  # Increased from 1 to 2 seconds
             stop()
             sleep(0.5)
+
+            print("Dropping LEGO...")
             open_arms()
             sleep(0.5)
+
+            print("Backing up...")
             drive(forward=False)
-            sleep(1)
+            sleep(1.5)  # Adjust as needed
             stop()
+
             close_arms()
             lego_grabbed = False
 
-            cam.isRedLineDetected = False
-            print("Rotating to reacquire red line...")
-            while not cam.isRedLineDetected:
-                left_motor.forward(speed=0.155)
-                right_motor.forward(speed=0.080)
-                sleep(0.5)
-            stop()
-            print("Red line reacquired. Resuming.")
+            print("Drop-off complete. Waiting to reacquire red line naturally...")
+
 
         else:
             print(f"No green match (score: {green_score:.2f})")
