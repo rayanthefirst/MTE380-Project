@@ -72,7 +72,7 @@ while True:
 
         else:
             print(f"No shape match (score: {match_score:.2f})")
-
+        lego_grabbed = True
     elif lego_grabbed and not dropoff_done:
         # ----- GREEN drop-off logic -----
         green_mask = cv2.inRange(hsv, green_lower, green_upper)
