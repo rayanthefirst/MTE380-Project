@@ -50,13 +50,11 @@ while True:
     blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
     # Resize to match the target mask size
-    # resized_blue_mask = cv2.resize(blue_mask, (100, 100))
+    resized_blue_mask = cv2.resize(blue_mask, (100, 100))
 
     # Compare with target shape
-    # match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
+    match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
 
-
-    match_score = np.any(blue_mask > 0)
     if match_score > 0.45:
         print(f"Blue shape match detected (score: {match_score:.2f})")
         stop()
@@ -80,10 +78,12 @@ while True:
         print(f"No shape match (score: {match_score:.2f})")
 
 
+    lego_grabbed = True
+
     # hANDLE LEGO DROP OFF
 
     # Handle LEGO drop-off by detecting green frame
-    if cam.latest_frame is not None:
+    if cam.latest_frame is not None and lego_grabbed:
         frame = cam.latest_frame.copy()
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -96,9 +96,15 @@ while True:
         green_ratio = cv2.countNonZero(green_mask) / (frame.shape[0] * frame.shape[1])
         if green_ratio > 0.2:  # Adjust threshold as needed
             print("Green frame detected. Dropping LEGO.")
+            drive(forward=True)
+            sleep(1)
             stop()
             sleep(1)
             open_arms()
+            drive(forward=False)
+            sleep(1)
+            stop()
+            close_arms()
             lego_grabbed = False
     
 
