@@ -21,7 +21,7 @@ target_mask = cv2.resize(target_mask, (100, 100))
 _, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
 
 error_threshold = 25
-lego_grabbed = True
+lego_grabbed = False
 dropoff_done = False
 
 while True:
