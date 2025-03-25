@@ -28,17 +28,17 @@ while True:
     # Red line following logic
     if cam.isRedLineDetected:
         if abs(cam.curr_error) < error_threshold:
-            print("Following red line: driving forward.")
+            # print("Following red line: driving forward.")
             drive(forward=True)
         else:
             if cam.curr_error > 0:
-                print("Red line to the right. Turning right.")
+                # print("Red line to the right. Turning right.")
                 turn(turn_right=True, error=abs(cam.curr_error))
             else:
-                print("Red line to the left. Turning left.")
+                # print("Red line to the left. Turning left.")
                 turn(turn_right=False, error=abs(cam.curr_error))
     else:
-        print("Red line lost. Stopping.")
+        # print("Red line lost. Stopping.")
         stop()
 
     # Use shared frame for LEGO detection
@@ -93,8 +93,7 @@ while True:
         green_mask = cv2.inRange(hsv, green_lower, green_upper)
 
         # Check if a significant portion of the frame is green
-        green_ratio = cv2.countNonZero(green_mask) / (frame.shape[0] * frame.shape[1])
-        if green_ratio > 0.2:  # Adjust threshold as needed
+        if cv2.countNonZero(green_mask) > 0:
             print("Green frame detected. Dropping LEGO.")
             drive(forward=True)
             sleep(1)
