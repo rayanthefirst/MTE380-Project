@@ -5,7 +5,7 @@ from time import sleep
 
 # Start the camera detection thread
 cam = Camera(camera_id=0)
-cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": True})
+cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": False})
 cameraThread.start()
 
 print("Spinning in place until red line is detected...")
