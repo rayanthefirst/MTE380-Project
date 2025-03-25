@@ -58,7 +58,6 @@ while True:
     if match_score > 0.50:
         print(f"Blue shape match detected (score: {match_score:.2f})")
         stop()
-        open_arms()
         sleep(1)
         close_arms()
         lego_grabbed = True
