@@ -92,7 +92,7 @@ while True:
 
             print("Driving forward to drop location...")
             drive(forward=True)
-            sleep(2)  # Increased from 1 to 2 seconds
+            sleep(1.5)  # Increased from 1 to 2 seconds
             stop()
             sleep(0.5)
 
