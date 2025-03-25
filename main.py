@@ -69,7 +69,7 @@ while True:
         while not cam.isRedLineDetected:
             left_motor.forward(speed=0.2)
             right_motor.forward(speed=0.1)
-            sleep(0.1)
+            sleep(0.2)
 
         stop()
         print("Red line reacquired. Resuming line following.")
