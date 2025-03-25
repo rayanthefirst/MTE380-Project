@@ -13,7 +13,7 @@ print("Spinning in place (clockwise) until red line is detected...")
 try:
     while not cam.isRedLineDetected:
         # In-place clockwise spin: left motor backward, right motor forward
-        left_motor.forward(speed=0.4)
+        left_motor.forward(speed=0.2)
         right_motor.forward(speed=0.1)
         sleep(0.1)
 
