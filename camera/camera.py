@@ -47,8 +47,6 @@ class Camera:
             blue_mask = cv.inRange(hsv, self.blue_lower, self.blue_upper)
             self.sees_blue = cv.countNonZero(blue_mask) > 20  # Adjust if needed
 
-            if display:
-                cv.imshow("Blue Mask", blue_mask)
 
             # --- RED LINE DETECTION ---
             mask1 = cv.inRange(hsv, self.red_lower, self.red_upper)
@@ -57,6 +55,8 @@ class Camera:
 
             if display:
                 cv.imshow("mask2", red_mask)
+            if display:
+                cv.imshow("Blue Mask", blue_mask)
 
             contours, _ = cv.findContours(
                 red_mask.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE
