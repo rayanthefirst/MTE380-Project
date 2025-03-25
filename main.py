@@ -12,14 +12,20 @@ cam = Camera(camera_id=0)
 cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": False})
 cameraThread.start()
 
-# HSV threshold for blue
+# HSV threshold for blue and green
 blue_lower = np.array([100, 100, 50])
 blue_upper = np.array([130, 255, 255])
+green_lower = np.array([40, 50, 50])
+green_upper = np.array([80, 255, 255])
 
-# Load the target shape (your bullseye top arc image)
-target_mask = cv2.imread("blueTarget.png", cv2.IMREAD_GRAYSCALE)
-target_mask = cv2.resize(target_mask, (100, 100))
-_, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
+# Load target shape masks
+blue_target_mask = cv2.imread("blueTarget.png", cv2.IMREAD_GRAYSCALE)
+blue_target_mask = cv2.resize(blue_target_mask, (100, 100))
+_, blue_target_mask = cv2.threshold(blue_target_mask, 127, 255, cv2.THRESH_BINARY)
+
+green_target_mask = cv2.imread("greenTarget.png", cv2.IMREAD_GRAYSCALE)
+green_target_mask = cv2.resize(green_target_mask, (100, 100))
+_, green_target_mask = cv2.threshold(green_target_mask, 127, 255, cv2.THRESH_BINARY)
 
 error_threshold = 25
 lego_grabbed = False
@@ -41,44 +47,71 @@ while True:
         print("Red line lost. Stopping.")
         stop()
 
-    # Use shared frame for LEGO detection
-    if cam.latest_frame is None or lego_grabbed:
+    # Use shared frame for detection
+    if cam.latest_frame is None:
         continue
 
     frame = cam.latest_frame.copy()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
-    # Resize to match the target mask size
-    resized_blue_mask = cv2.resize(blue_mask, (100, 100))
+    # --- BLUE Target Detection ---
+    if not lego_grabbed:
+        blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
+        resized_blue = cv2.resize(blue_mask, (100, 100))
+        blue_score = cv2.matchTemplate(resized_blue, blue_target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
 
-    # Compare with target shape
-    match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
+        if blue_score > 0.45:
+            print(f"Blue shape match detected (score: {blue_score:.2f})")
+            stop()
+            sleep(1)
+            close_arms()
+            lego_grabbed = True
 
-    if match_score > 0.45:
-        print(f"Blue shape match detected (score: {match_score:.2f})")
-        stop()
-        sleep(1)
-        close_arms()
-        lego_grabbed = True
+            cam.isRedLineDetected = False
+            print("Rotating until red line is found...")
+            while not cam.isRedLineDetected:
+                left_motor.forward(speed=0.155)
+                right_motor.forward(speed=0.080)
+                sleep(0.5)
+            stop()
+            print("Red line reacquired. Resuming.")
 
-        # Force red line detection to false to ensure spin loop triggers
-        cam.isRedLineDetected = False
+        else:
+            print(f"No blue match (score: {blue_score:.2f})")
 
-        print("Rotating in place until red line is found...")
-        while not cam.isRedLineDetected:
-            left_motor.forward(speed=0.155)
-            right_motor.forward(speed=0.080)
+    # --- GREEN Target Detection ---
+    if lego_grabbed:
+        green_mask = cv2.inRange(hsv, green_lower, green_upper)
+        resized_green = cv2.resize(green_mask, (100, 100))
+        green_score = cv2.matchTemplate(resized_green, green_target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
+
+        if green_score > 0.45:
+            print(f"Green shape match detected (score: {green_score:.2f})")
+            stop()
             sleep(0.5)
+            drive(forward=True)
+            sleep(1)
+            stop()
+            sleep(0.5)
+            open_arms()
+            sleep(0.5)
+            drive(forward=False)
+            sleep(1)
+            stop()
+            close_arms()
+            lego_grabbed = False
 
-        stop()
-        print("Red line reacquired. Resuming line following.")
+            cam.isRedLineDetected = False
+            print("Rotating to reacquire red line...")
+            while not cam.isRedLineDetected:
+                left_motor.forward(speed=0.155)
+                right_motor.forward(speed=0.080)
+                sleep(0.5)
+            stop()
+            print("Red line reacquired. Resuming.")
 
-    else:
-        print(f"No shape match (score: {match_score:.2f})")
-
-
-        
+        else:
+            print(f"No green match (score: {green_score:.2f})")
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
