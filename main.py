@@ -12,20 +12,14 @@ cam = Camera(camera_id=0)
 cameraThread = threading.Thread(target=cam.start_detection, kwargs={"display": False})
 cameraThread.start()
 
-# HSV threshold for blue and green
+# HSV threshold for blue
 blue_lower = np.array([100, 100, 50])
 blue_upper = np.array([130, 255, 255])
-green_lower = np.array([40, 50, 50])
-green_upper = np.array([80, 255, 255])
 
-# Load target shape masks
-blue_target_mask = cv2.imread("blueTarget.png", cv2.IMREAD_GRAYSCALE)
-blue_target_mask = cv2.resize(blue_target_mask, (100, 100))
-_, blue_target_mask = cv2.threshold(blue_target_mask, 127, 255, cv2.THRESH_BINARY)
-
-green_target_mask = cv2.imread("greenTarget.png", cv2.IMREAD_GRAYSCALE)
-green_target_mask = cv2.resize(green_target_mask, (100, 100))
-_, green_target_mask = cv2.threshold(green_target_mask, 127, 255, cv2.THRESH_BINARY)
+# Load the target shape (your bullseye top arc image)
+target_mask = cv2.imread("blueTarget.png", cv2.IMREAD_GRAYSCALE)
+target_mask = cv2.resize(target_mask, (100, 100))
+_, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
 
 error_threshold = 25
 lego_grabbed = False
@@ -47,70 +41,41 @@ while True:
         print("Red line lost. Stopping.")
         stop()
 
-    # Use shared frame for detection
-    if cam.latest_frame is None:
+    # Use shared frame for LEGO detection
+    if cam.latest_frame is None or lego_grabbed:
         continue
 
     frame = cam.latest_frame.copy()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
 
-    # --- BLUE Target Detection ---
-    if not lego_grabbed:
-        blue_mask = cv2.inRange(hsv, blue_lower, blue_upper)
-        resized_blue = cv2.resize(blue_mask, (100, 100))
-        blue_score = cv2.matchTemplate(resized_blue, blue_target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
+    # Resize to match the target mask size
+    resized_blue_mask = cv2.resize(blue_mask, (100, 100))
 
-        if blue_score > 0.39:
-            print(f"Blue shape match detected (score: {blue_score:.2f})")
-            stop()
-            sleep(1)
-            close_arms()
-            lego_grabbed = True
+    # Compare with target shape
+    match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
 
-            cam.isRedLineDetected = False
-            print("Rotating until red line is found...")
-            while not cam.isRedLineDetected:
-                left_motor.forward(speed=0.155)
-                right_motor.forward(speed=0.080)
-                sleep(0.5)
-            stop()
-            print("Red line reacquired. Resuming.")
+    if match_score > 0.4:
+        print(f"Blue shape match detected (score: {match_score:.2f})")
+        stop()
+        sleep(1)
+        close_arms()
+        lego_grabbed = True
 
-        else:
-            print(f"No blue match (score: {blue_score:.2f})")
+        # Force red line detection to false to ensure spin loop triggers
+        cam.isRedLineDetected = False
 
-    # --- GREEN Target Detection ---
-    if lego_grabbed:
-        green_mask = cv2.inRange(hsv, green_lower, green_upper)
-        resized_green = cv2.resize(green_mask, (100, 100))
-        green_score = cv2.matchTemplate(resized_green, green_target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
-
-        if green_score > 0.070:
-            print(f"Green shape match detected (score: {green_score:.2f})")
-            stop()
+        print("Rotating in place until red line is found...")
+        while not cam.isRedLineDetected:
+            left_motor.forward(speed=0.155)
+            right_motor.forward(speed=0.080)
             sleep(0.5)
 
-            print("Driving forward to drop location...")
-            drive(forward=True)
-            sleep(1.5)  # Increased from 1 to 2 seconds
-            stop()
+        stop()
+        print("Red line reacquired. Resuming line following.")
 
-            print("Dropping LEGO...")
-            open_arms()
-
-            print("Backing up...")
-            drive(forward=False)
-            sleep(1.5)  # Adjust as needed
-            stop()
-
-            close_arms()
-            lego_grabbed = False
-
-            print("Drop-off complete. Waiting to reacquire red line naturally...")
-
-
-        else:
-            print(f"No green match (score: {green_score:.2f})")
+    else:
+        print(f"No shape match (score: {match_score:.2f})")
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
