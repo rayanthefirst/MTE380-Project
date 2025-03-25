@@ -77,6 +77,29 @@ while True:
     else:
         print(f"No shape match (score: {match_score:.2f})")
 
+
+    # hANDLE LEGO DROP OFF
+
+    # Handle LEGO drop-off by detecting green frame
+    if cam.latest_frame is not None:
+        frame = cam.latest_frame.copy()
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # HSV threshold for green
+        green_lower = np.array([40, 50, 50])
+        green_upper = np.array([80, 255, 255])
+        green_mask = cv2.inRange(hsv, green_lower, green_upper)
+
+        # Check if a significant portion of the frame is green
+        green_ratio = cv2.countNonZero(green_mask) / (frame.shape[0] * frame.shape[1])
+        if green_ratio > 0.2:  # Adjust threshold as needed
+            print("Green frame detected. Dropping LEGO.")
+            stop()
+            sleep(1)
+            open_arms()
+            lego_grabbed = False
+    
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
