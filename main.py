@@ -79,7 +79,14 @@ while True:
     else:
         print(f"No shape match (score: {match_score:.2f})")
 
+    # If LEGO is grabbed but red line is lost, open arms
+    if lego_grabbed and not cam.isRedLineDetected:
+        print("LEGO grabbed but red line lost — opening arms.")
+        open_arms()
+        sleep(1)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
 
 cv2.destroyAllWindows()
