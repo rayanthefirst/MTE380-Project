@@ -21,7 +21,7 @@ target_mask = cv2.imread("blueTarget.png", cv2.IMREAD_GRAYSCALE)
 target_mask = cv2.resize(target_mask, (100, 100))
 _, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
 
-error_threshold = 15
+error_threshold = 0
 lego_grabbed = False
 arms_opened_after_lost = False  # ✅ Prevent multiple open calls
 
