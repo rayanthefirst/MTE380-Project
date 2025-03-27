@@ -14,8 +14,8 @@ right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 SPEED = 0.10
 TURN_SPEED = 0.08
 kp = 0.25
-kd = 0.25
-ki = 0.22
+kd = 0.30
+ki = 0.23
 
 last_error = 0.0
 integral_error = 0.0
