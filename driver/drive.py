@@ -15,7 +15,7 @@ SPEED = 0.09
 TURN_SPEED = 0.09
 kp = 0.25
 kd = 0.30
-ki = 0.23
+ki = 0.25
 
 last_error = 0.0
 integral_error = 0.0
