@@ -23,27 +23,11 @@ _, target_mask = cv2.threshold(target_mask, 127, 255, cv2.THRESH_BINARY)
 
 error_threshold = 25
 lego_grabbed = False
+arms_opened_after_lost = False  # ✅ Prevent multiple open calls
 
 while True:
-    # Red line following logic
-    if cam.isRedLineDetected:
-        if abs(cam.curr_error) < error_threshold:
-            print("Following red line: driving forward.")
-            drive(forward=True)
-        else:
-            if cam.curr_error > 0:
-                print("Red line to the right. Turning right.")
-                turn(turn_right=True, error=abs(cam.curr_error))
-            else:
-                print("Red line to the left. Turning left.")
-                turn(turn_right=False, error=abs(cam.curr_error))
-    else:
-        print("Red line lost. Stopping.")
-        stop()
-        # sleep(2)
-        # open_arms()
-
-    # Use shared frame for LEGO detection
+    if cam.latest_frame is None:
+        continue
 
     frame = cam.latest_frame.copy()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -55,7 +39,7 @@ while True:
     # Compare with target shape
     match_score = cv2.matchTemplate(resized_blue_mask, target_mask, cv2.TM_CCOEFF_NORMED)[0][0]
 
-    if match_score > 0.4:
+    if not lego_grabbed and match_score > 0.4:
         print(f"Blue shape match detected (score: {match_score:.2f})")
         stop()
         sleep(1)
@@ -73,21 +57,33 @@ while True:
 
         stop()
         print("Red line reacquired. Resuming line following.")
-
     else:
         print(f"No shape match (score: {match_score:.2f})")
 
-    # If LEGO is grabbed but red line is lost, open arms
-    if lego_grabbed and not cam.isRedLineDetected:
-        print("LEGO grabbed but red line lost — opening arms.")
-        open_arms()
-        sleep(1)
+    # Red line following logic
+    if cam.isRedLineDetected:
+        if abs(cam.curr_error) < error_threshold:
+            print("Following red line: driving forward.")
+            drive(forward=True)
+        else:
+            if cam.curr_error > 0:
+                print("Red line to the right. Turning right.")
+                turn(turn_right=True, error=abs(cam.curr_error))
+            else:
+                print("Red line to the left. Turning left.")
+                turn(turn_right=False, error=abs(cam.curr_error))
+    else:
+        print("Red line lost. Stopping.")
+        stop()
 
-    if cam.latest_frame is None or lego_grabbed:
-        continue
+        # LEGO was grabbed but red line is now lost → open arms once
+        if lego_grabbed and not arms_opened_after_lost:
+            print("LEGO grabbed but red line lost — opening arms.")
+            open_arms()
+            sleep(1)
+            arms_opened_after_lost = True  # ✅ Only do it once
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-
 
 cv2.destroyAllWindows()
