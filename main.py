@@ -42,7 +42,7 @@ while True:
     if not lego_grabbed and match_score > 0.4:
         print(f"Blue shape match detected (score: {match_score:.2f})")
         stop()
-        sleep(1)
+        sleep(2)
         close_arms()
         lego_grabbed = True
 
