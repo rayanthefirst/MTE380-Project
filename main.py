@@ -1,6 +1,6 @@
 from camera.camera import Camera
 from driver.drive import drive, stop, turn, left_motor, right_motor
-from driver.servo import open_arms, close_arms, left_motor, right_motor
+from driver.servo import open_arms, close_arms
 
 import cv2
 import numpy as np
@@ -46,8 +46,6 @@ while True:
         close_arms()
         sleep(1)
         lego_grabbed = True
-        left_motor.detach()
-        right_motor.detach()
 
         # Force red line detection to false to ensure spin loop triggers
         cam.isRedLineDetected = False
