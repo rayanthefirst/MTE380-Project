@@ -11,11 +11,11 @@ right_motor = Motor(forward=12, backward=13)
 left_encoder = RotaryEncoder(a=9, b=10, max_steps=0)
 right_encoder = RotaryEncoder(a=17, b=18, max_steps=0)
 
-SPEED = 0.11
-TURN_SPEED = 0.09
+SPEED = 0.10
+TURN_SPEED = 0.08
 kp = 0.3
 kd = 0.25
-ki = 0.2
+ki = 0.22
 
 last_error = 0.0
 integral_error = 0.0
