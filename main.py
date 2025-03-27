@@ -1,6 +1,6 @@
 from camera.camera import Camera
 from driver.drive import drive, stop, turn, left_motor, right_motor
-from driver.servo import open_arms, close_arms
+from driver.servo import open_arms, close_arms, left_motor, right_motor
 
 import cv2
 import numpy as np

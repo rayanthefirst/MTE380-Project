@@ -8,7 +8,7 @@ def open_arms():
     right = Servo(20)
     left.value = -1.0
     right.value = 1.0
-    sleep(1)
+    sleep(2)
     left.detach()
     right.detach()
 
@@ -18,6 +18,6 @@ def close_arms():
     right = Servo(20)
     left.max()      # Equivalent to left.value = 1.0
     right.min()     # Equivalent to right.value = -1.0
-    sleep(1)
+    sleep(2)
     left.detach()
     right.detach()
