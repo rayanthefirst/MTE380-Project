@@ -44,8 +44,6 @@ while True:
         # open_arms()
 
     # Use shared frame for LEGO detection
-    if cam.latest_frame is None or lego_grabbed:
-        continue
 
     frame = cam.latest_frame.copy()
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -84,6 +82,9 @@ while True:
         print("LEGO grabbed but red line lost — opening arms.")
         open_arms()
         sleep(1)
+
+    if cam.latest_frame is None or lego_grabbed:
+        continue
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
