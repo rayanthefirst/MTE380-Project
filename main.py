@@ -52,7 +52,7 @@ while True:
 
         print("Rotating in place until red line is found...")
         while not cam.isRedLineDetected:
-            left_motor.forward(speed=0.145)
+            left_motor.forward(speed=0.140)
             right_motor.forward(speed=0.060)
             sleep(0.5)
 
