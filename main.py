@@ -44,7 +44,10 @@ while True:
         stop()
         sleep(2)
         close_arms()
+        sleep(1)
         lego_grabbed = True
+        left_motor.detach()
+        right_motor.detach()
 
         # Force red line detection to false to ensure spin loop triggers
         cam.isRedLineDetected = False
